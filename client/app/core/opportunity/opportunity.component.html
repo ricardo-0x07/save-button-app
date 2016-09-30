@@ -1,0 +1,32 @@
+<div>
+	<div class="panel panel-default">
+		<div class='panel-heading projectBg'>
+			<h3 class="capitalize">Opportunity: {{$ctrl.opportunity.name}} <input type="checkbox" ng-model="$ctrl.selected" ng-checked="$ctrl.selected" name="select-opportunity"
+					ng-show="$parent.$parent.$ctrl.select" ng-change="$ctrl.selectedChanged()"></h3>
+		</div>
+		<div class="panel-body">
+			<div class="row">
+				<div class="col-xs-12">
+					<img src="{{opportunity.imagePath}}" alt="" class="img-responsive">
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-12">
+					<h1>{{opportunity.name}}</h1>
+				</div>
+			</div>
+			<hr>
+			<div class="row">
+				<div class="col-xs-12">
+					<p>{{opportunity.description}}</p>
+				</div>
+			</div>
+			<div class="col-xs-12">
+				<a ui-sref="updateOpportunity({opportunity: $ctrl.opportunity})">
+					<button>Update</button>
+				</a>
+			</div>
+		</div>
+	</div>
+</div>
+</div>

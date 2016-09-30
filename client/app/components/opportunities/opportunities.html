@@ -1,0 +1,48 @@
+<div>This is the opportunities view.</div>
+<div id='opportunities'>
+  <div class="">
+    <div class='row'>
+      <div class='col-xs-12'>
+        <div class="row">
+          <div class='col-xs-12'>
+            <form class="form-inline" style="width: 100%; margin: auto;">
+              <div class="form-group"  style="width: 100%; margin-top: 0px !important;">
+                <a >
+                  <button>New</button>
+                </a>
+                <div class="checkbox pull-right" style="padding-top: 9.8px; padding-bottom: 9.8px; margin-top: 0px !important">
+                  <label for="select" class="link">
+                    <input type="checkbox" ng-model="$ctrl.select" name="select" id="select" ng-change="$ctrl.selectChanged()"> Select
+                  </label>
+                </div>
+              </div>           
+            </form>
+          </div>
+        </div>
+      </div>
+      <div class='row'>
+        <div class='col-xs-12'>
+          <form style="width: 90%; margin: auto; margin: auto;">
+            <label for="search-opportunities" class="form-label">Search:</label>
+            <input autofocused ng-model="$ctrl.query" type='text' id="search-opportunities" class='form-control' placeholder='Search Opportunities' ></input>          
+          </form>        
+        </div>
+      </div>
+    </div>
+    <div class='row' infinite-scroll="$ctrl.getMoreData()" style="padding-top: 15px;">
+      <opportunity ng-repeat="opportunity in $ctrl.opportunities | filter:$ctrl.query | orderBy:opportunity.name track by opportunity.id" class="col-xs-12 col-sm-6 col-md-4 col-lg-3" opportunity="opportunity"></opportunity>
+    </div>
+  </div>
+  <nav class="navbar navbar-inverse navbar-fixed-bottom" ng-show="$ctrl.select">
+    <div class="container">
+      <form class="form-inline" style="width: 90%; margin: auto;">
+        <div class="form-group">
+          <label style="color: #fff;">{{$ctrl.selected.length}} Opportunities Selected</label>
+          <a ng-click="$ctrl.addTo()">
+            <button>Add TO</button>
+          </a>
+        </div>
+      </form>
+    </div>
+  </nav>
+</div>

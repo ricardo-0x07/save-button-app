@@ -1,0 +1,48 @@
+{
+  "name": "save-button-app",
+  "description": "Your save button application for though economic times.",
+  "main": "server/index.js",
+  "authors": [
+    "Clive R. Cadogan <ricardo_0x07@yahoo.com>"
+  ],
+  "license": "MIT",
+  "keywords": [
+    "save",
+    "money",
+    "find",
+    "bargins",
+    "share",
+    "stretch",
+    "your",
+    "money",
+    "be",
+    "resourceful"
+  ],
+  "homepage": "",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "polymer": "Polymer/polymer#^1.1.0",
+    "gold-elements": "PolymerElements/gold-elements#^1.0.1",
+    "iron-elements": "PolymerElements/iron-elements#^1.0.10",
+    "paper-progress": "PolymerElements/paper-progress#^1.0.9",
+    "paper-elements": "PolymerElements/paper-elements#^1.0.7",
+    "google-apis": "GoogleWebComponents/google-apis#~1.1.2",
+    "google-map": "GoogleWebComponents/google-map#^1.1.10",
+    "ng-polymer-elements": "^0.3.0",
+    "bootstrap-ui-datetime-picker": "^2.4.3",
+    "ui-router-extras": "^0.1.2",
+    "angular-pusher": "latest",
+    "angular-bootstrap": "^2.1.4"
+  },
+  "resolutions": {
+    "angular-bootstrap": "^2.1.4",
+    "angular": "^1.4.0"
+  }
+}
