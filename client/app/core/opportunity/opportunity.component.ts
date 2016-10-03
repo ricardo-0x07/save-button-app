@@ -22,8 +22,8 @@ export class opportunityComponent {
 
   }
   getImage(data) {
-    // console.log('data', data);
-    return 'data:image/jpeg;base64,' + data;
+    console.log('data', data);
+    return 'data:' + data.type + ';base64,' + data.base64;
   }
 
 }

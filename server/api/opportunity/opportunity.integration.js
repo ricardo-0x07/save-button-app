@@ -58,7 +58,7 @@ describe('Opportunity API:', function() {
 
     beforeEach(function(done) {
       request(app)
-        .get(`/api/opportunitys/${newOpportunity._id}`)
+        .get(`/api/opportunitys/${newOpportunity.id}`)
         .expect(200)
         .expect('Content-Type', /json/)
         .end((err, res) => {
@@ -85,7 +85,7 @@ describe('Opportunity API:', function() {
 
     beforeEach(function(done) {
       request(app)
-        .put(`/api/opportunitys/${newOpportunity._id}`)
+        .put(`/api/opportunitys/${newOpportunity.id}`)
         .send({
           name: 'Updated Opportunity',
           info: 'This is the updated opportunity!!!'
@@ -112,7 +112,7 @@ describe('Opportunity API:', function() {
 
     it('should respond with the updated opportunity on a subsequent GET', function(done) {
       request(app)
-        .get(`/api/opportunitys/${newOpportunity._id}`)
+        .get(`/api/opportunitys/${newOpportunity.id}`)
         .expect(200)
         .expect('Content-Type', /json/)
         .end((err, res) => {
@@ -134,7 +134,7 @@ describe('Opportunity API:', function() {
 
     beforeEach(function(done) {
       request(app)
-        .patch(`/api/opportunitys/${newOpportunity._id}`)
+        .patch(`/api/opportunitys/${newOpportunity.id}`)
         .send([
           { op: 'replace', path: '/name', value: 'Patched Opportunity' },
           { op: 'replace', path: '/info', value: 'This is the patched opportunity!!!' }
@@ -163,7 +163,7 @@ describe('Opportunity API:', function() {
   describe('DELETE /api/opportunitys/:id', function() {
     it('should respond with 204 on successful removal', function(done) {
       request(app)
-        .delete(`/api/opportunitys/${newOpportunity._id}`)
+        .delete(`/api/opportunitys/${newOpportunity.id}`)
         .expect(204)
         .end(err => {
           if(err) {
@@ -175,7 +175,7 @@ describe('Opportunity API:', function() {
 
     it('should respond with 404 when opportunity does not exist', function(done) {
       request(app)
-        .delete(`/api/opportunitys/${newOpportunity._id}`)
+        .delete(`/api/opportunitys/${newOpportunity.id}`)
         .expect(404)
         .end(err => {
           if(err) {

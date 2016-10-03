@@ -4,7 +4,6 @@
 // Development specific configuration
 // ==================================
 module.exports = {
-
   // Sequelize connection opions
   sequelize: {
     uri: 'sqlite://',

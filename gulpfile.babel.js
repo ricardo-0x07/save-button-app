@@ -409,7 +409,6 @@ gulp.task('test:server:coverage', cb => {
               'coverage:integration',
               cb);
 });
-
 gulp.task('coverage:pre', () => {
   return gulp.src(paths.server.scripts)
     // Covering files

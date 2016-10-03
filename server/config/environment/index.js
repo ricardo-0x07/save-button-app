@@ -20,10 +20,10 @@ var all = {
   root: path.normalize(`${__dirname}/../../..`),
 
   // Browser-sync port
-  browserSyncPort: process.env.BROWSER_SYNC_PORT || 5000,
+  browserSyncPort: process.env.BROWSER_SYNC_PORT || 7500,
 
   // Server port
-  port: process.env.PORT || 9500,
+  port: process.env.PORT || 9000,
 
   // Server IP
   ip: process.env.IP || '0.0.0.0',
@@ -69,4 +69,5 @@ var all = {
 module.exports = _.merge(
   all,
   require('./shared'),
+
   require(`./${process.env.NODE_ENV}.js`) || {});

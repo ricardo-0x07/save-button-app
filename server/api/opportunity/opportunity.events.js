@@ -26,7 +26,7 @@ for(var e in events) {
 
 function emitEvent(event) {
   return function(doc, options, done) {
-    OpportunityEvents.emit(event + ':' + doc._id, doc);
+    OpportunityEvents.emit(event + ':' + doc.id, doc);
     OpportunityEvents.emit(event, doc);
     done(null);
   };

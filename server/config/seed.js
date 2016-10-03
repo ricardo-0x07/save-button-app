@@ -45,67 +45,54 @@ sqldb.Opportunity.sync()
   .then(() => {
     sqldb.Opportunity.bulkCreate([{
       name: 'electronics',
-      image: fs.readFileSync(__dirname + '/deal1.jpeg').toString('base64'),
-      description: ' Best Buy has one day sale 50% off electronics. Today Only.',
-      file: {
-        name: 'deal1.jpeg',
-        base64: fs.readFileSync(__dirname + '/deal1.jpeg').toString('base64'),
-        type: 'image/jpeg'
-      }
+      description: ' Best Buy has one day sale 50% off electronics. Today Only.' //,
+      // File: {
+      //   name: 'deal1.jpeg',
+      //   base64: fs.readFileSync(__dirname + '/deal1.jpeg').toString('base64'),
+      //   type: 'image/jpeg'
+      // }
     }, {
         name: 'Microwave food',
-        image: fs.readFileSync(__dirname + '/deal2.jpeg').toString('base64'),
-        description: 'Truevalues 50% sale on djouno Pizza.',
-        file: {
-        name: 'deal2.jpeg',
-        base64: fs.readFileSync(__dirname + '/deal2.jpeg').toString('base64'),
-        type: 'base64/jpeg'
-      }
+        description: 'Truevalues 50% sale on djouno Pizza.' //,
       }, {
         name: 'Chistmas sale',
-        image: fs.readFileSync(__dirname + '/deal3.jpeg').toString('base64'),
-        description: ' Walmart sale on toys and gift. Starts Today.',
-        file: {
-        name: 'deal3.jpeg',
-        base64: fs.readFileSync(__dirname + '/deal3.jpeg').toString('base64'),
-        type: 'image/jpeg'
-      }
+        description: ' Walmart sale on toys and gift. Starts Today.' //,
       }]);
   }).then(function () { // Notice: There are no arguments here, as of right now you'll have to...
     console.log('finished populating opportunities');
-    return sqldb.Opportunity.findAll({include: [{model: sqldb.File}]});
-  // }).then(function (opportunities) {
-  //   // console.log('opportunities', opportunities); // ... in order to get the array of user objects
-  //   var opportunity_ids = u.map(opportunities, function (x) {
-  //     return x._id;
-  //   });
-  //   console.log('opportunity_ids', opportunity_ids);
-    
-  //   return File.bulkCreate([
-  //     {
-  //       name: 'deal1.jpeg',
-  //       base64: fs.readFileSync(__dirname + '/deal1.jpeg').toString('base64'),
-  //       type: 'image/jpeg',
-  //       OpportunityId: opportunity_ids[0]
-  //     },
-  //     {
-  //       name: 'deal2.jpeg',
-  //       base64: fs.readFileSync(__dirname + '/deal2.jpeg').toString('base64'),
-  //       type: 'base64/jpeg',
-  //       OpportunityId: opportunity_ids[1]
-  //     },
-  //     {
-  //       name: 'deal3.jpeg',
-  //       base64: fs.readFileSync(__dirname + '/deal3.jpeg').toString('base64'),
-  //       type: 'image/jpeg',
-  //       OpportunityId: opportunity_ids[2]
-  //     },
-  //   ]);
-  // }).then(function () { // Notice: There are no arguments here, as of right now you'll have to...
-  //   console.log('finished populating files');
-  //   return File.findAll();
+    return sqldb.Opportunity.findAll();
   }).then(function (opportunities) {
-    console.log('opportunities', opportunities); // ... in order to get the array of user objects
+    console.log('opportunities', opportunities);
+    // console.log('opportunities', opportunities); // ... in order to get the array of user objects
+    var opportunity_ids = u.map(opportunities, function (x) {
+      return x.id;
+    });
+    console.log('opportunity_ids', opportunity_ids);
+    return sqldb.File.bulkCreate([
+      {
+        name: 'deal1.jpeg',
+        base64: fs.readFileSync(__dirname + '/deal1.jpeg').toString('base64'),
+        type: 'image/jpeg',
+        OpportunityId: opportunity_ids[0]
+      },
+      {
+        name: 'deal2.jpeg',
+        base64: fs.readFileSync(__dirname + '/deal2.jpeg').toString('base64'),
+        type: 'image/jpeg',
+        OpportunityId: opportunity_ids[1]
+      },
+      {
+        name: 'deal3.jpeg',
+        base64: fs.readFileSync(__dirname + '/deal3.jpeg').toString('base64'),
+        type: 'image/jpeg',
+        OpportunityId: opportunity_ids[2]
+      },
+    ]);
+  }).then(function () { // Notice: There are no arguments here, as of right now you'll have to...
+    console.log('finished populating files');
+    return sqldb.Opportunity.findAll({include: [{model: sqldb.File}]});
+  }).then(function (files) {
+    console.log('files', files); // ... in order to get the array of user objects
   })
   .catch(function(error) {
     console.log('error', error);

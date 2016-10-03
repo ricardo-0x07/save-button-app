@@ -11,14 +11,12 @@
 'use strict';
 
 import jsonpatch from 'fast-json-patch';
+import sqldb from '../../sqldb';
 import {Opportunity, File} from '../../sqldb';
 
 function respondWithResult(res, statusCode) {
-  console.log('response', res);
-  console.log('statusCode', statusCode);
   statusCode = statusCode || 200;
   return function (entity) {
-    console.log('entity', entity);
 
     if (entity) {
       return res.status(statusCode).json(entity);
@@ -63,13 +61,14 @@ function handleEntityNotFound(res) {
 function handleError(res, statusCode) {
   statusCode = statusCode || 500;
   return function (err) {
+    console.log('error', err);
     res.status(statusCode).send(err);
   };
 }
 
 // Gets a list of Opportunitys
 export function index(req, res) {
-  return Opportunity.findAll()
+  return Opportunity.findAll({include: [{model: sqldb.File}]})
     .then(respondWithResult(res))
     .catch(handleError(res));
 }
@@ -91,7 +90,7 @@ export function show(req, res) {
 
 // Creates a new Opportunity in the DB
 export function create(req, res) {
-  return Opportunity.create(req.body)
+  return Opportunity.create(req.body, {include: [sqldb.File]})
     .then(respondWithResult(res, 201))
     .catch(handleError(res));
 }

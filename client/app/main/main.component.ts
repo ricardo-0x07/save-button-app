@@ -2,6 +2,7 @@ const angular = require('angular');
 const uiRouter = require('angular-ui-router');
 const upload = require('angular-base64-upload');
 import routing from './main.routes';
+const lodash = require('lodash');
 
 export class MainController {
   $http;
@@ -37,15 +38,29 @@ export class MainController {
   }
 
   addOpportunities() {
-    this.$http.get('/api/files').then(response => {
-      // this.awesomeOpportunities = response.data;
-      console.log('files response', response);
-      // this.socket.syncUpdates('opportunity', this.awesomeOpportunities);
-    });
-    // if (this.newOpportunity {
-    //   this.$http.post('/api/opportunities', { name: this.newOpportunity });
-    //   this.newOpportunity = '';
-    // }
+    console.log('this.newOpportunity', this.newOpportunity);
+    if (this.newOpportunity) {
+      var newFile = {};
+      var File = this.newOpportunity.File;
+      newFile.name = File.filename;
+      newFile.type = File.filetype;
+      newFile.size = File.filesize;
+      newFile.base64 = File.base64;
+      this.newOpportunity.File = newFile;
+      // console.log('File', File);
+      // this.newOpportunity = lodash.omit(this.newOpportunity, ['File']);
+      // console.log('this.newOpportunity less file: ', this.newOpportunity);
+      this.$http.post('/api/opportunities', this.newOpportunity)
+      // .then(function(response) {
+      //   console.log('response', response);
+      //   File.OpportunityId = response.data.id;
+      //   return this.$http.post('/api/files', File)
+      // })
+      .then(function(response) {
+        console.log('response', response);
+      });
+      this.newOpportunity = '';
+    }
   }
 
   deleteOpportunity(opportunity) {
