@@ -1,6 +1,6 @@
 'use strict';
 
-import {User} from '../../sqldb';
+import {User, Opportunity} from '../../sqldb';
 import config from '../../config/environment';
 import jwt from 'jsonwebtoken';
 

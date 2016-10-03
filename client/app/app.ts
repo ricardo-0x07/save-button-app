@@ -1,5 +1,4 @@
-'use strict';
-require('../../bower_components/webcomponentsjs/webcomponents');
+// 'use strict';
 const angular = require('angular');
 // import ngAnimate from 'angular-animate';
 const ngCookies = require('angular-cookies');
@@ -29,13 +28,12 @@ import opportunities from './components/opportunities/opportunities.component';
 import opportunity from './core/opportunity/opportunity.component';
 import opportunityService from './core/services/opportunity/opportunity.service';
 
-
 import './app.scss';
-
 angular.module('saveButtonAppApp', [
   ngCookies,
   ngResource,
   ngSanitize,
+  // ngCordova,
   infiniteScroll,
 
   'btford.socket-io',

@@ -1,47 +1,73 @@
 const angular = require('angular');
 const uiRouter = require('angular-ui-router');
+const upload = require('angular-base64-upload');
 import routing from './main.routes';
 
 export class MainController {
   $http;
   socket;
-  awesomeThings = [];
-  newThing = '';
+  awesomeOpportunities = [];
+  newOpportunity = '';
+  public myFile = null;
 
   /*@ngInject*/
   constructor($http, $scope, socket) {
     this.$http = $http;
     this.socket = socket;
 
-    $scope.$on('$destroy', function() {
-      socket.unsyncUpdates('thing');
+    $scope.$on('$destroy', function () {
+      socket.unsyncUpdates('opportunity');
     });
   }
 
   $onInit() {
-    this.$http.get('/api/things').then(response => {
-      this.awesomeThings = response.data;
-      this.socket.syncUpdates('thing', this.awesomeThings);
+    this.$http.get('/api/opportunities').then(response => {
+      this.awesomeOpportunities = response.data;
+      console.log('this.awesomeOpportunities', this.awesomeOpportunities);
+      this.socket.syncUpdates('opportunity', this.awesomeOpportunities);
+    })
+      .then(() => {
+        // this.$http.get('/api/files').then(response => {
+        //   // this.awesomeOpportunities = response.data;
+        //   console.log('files response', response);
+        //   // this.socket.syncUpdates('opportunity', this.awesomeOpportunities);
+        // });
+
+      });
+  }
+
+  addOpportunities() {
+    this.$http.get('/api/files').then(response => {
+      // this.awesomeOpportunities = response.data;
+      console.log('files response', response);
+      // this.socket.syncUpdates('opportunity', this.awesomeOpportunities);
     });
+    // if (this.newOpportunity {
+    //   this.$http.post('/api/opportunities', { name: this.newOpportunity });
+    //   this.newOpportunity = '';
+    // }
   }
 
-  addThing() {
-    if (this.newThing) {
-      this.$http.post('/api/things', { name: this.newThing });
-      this.newThing = '';
-    }
+  deleteOpportunity(opportunity) {
+    this.$http.delete('/api/opportunities/' + opportunity._id);
   }
 
-  deleteThing(thing) {
-    this.$http.delete('/api/things/' + thing._id);
+  // uploadFiles = function () {
+  //   var files = angular.copy(this.files);
+  //   if (this.file) {
+  //     files.push(this.file);
+  //   }
+  // };
+  onload() {
+    console.log('this', this);
   }
 }
 
 export default angular.module('saveButtonAppApp.main', [
-  uiRouter])
-    .config(routing)
-    .component('main', {
-      template: require('./main.html'),
-      controller: MainController
-    })
-    .name;
+  uiRouter, upload])
+  .config(routing)
+  .component('main', {
+    template: require('./main.html'),
+    controller: MainController
+  })
+  .name;

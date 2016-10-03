@@ -7,7 +7,7 @@ import routes from './opportunities.routes';
 
 import Opportunity from '../../core/opportunity/opportunity.component';
 
-import OpportunityService from '../../core/services/opportunity.service';
+// import OpportunityService from '../../core/services/opportunity.service';
 
 export interface IOppertunity {
   id: number;
@@ -23,7 +23,7 @@ export interface IOppertunity {
 export class OpportunitiesComponent {
   public opportunities: Opportunity[] = [];
   /*@ngInject*/
-  constructor(public opportunityService: OpportunityService) {
+  constructor(public opportunityService) {
     this.opportunities = this.opportunityService.
     console.log('this', this)
   }

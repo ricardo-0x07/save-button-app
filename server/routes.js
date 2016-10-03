@@ -7,18 +7,19 @@
 import errors from './components/errors';
 import path from 'path';
 
-export default function(app) {
+export default function (app) {
   // Insert routes below
-  app.use('/api/opportunitys', require('./api/opportunity'));
-  app.use('/? What will the url of your endpoint to be? /api/games', require('./api/game'));
-  app.use('/api/things', require('./api/thing'));
+  console.log('before index');
+  app.use('/api/files', require('./api/file'));
+  console.log('after index');
+  app.use('/api/opportunities', require('./api/opportunity'));
   app.use('/api/users', require('./api/user'));
 
   app.use('/auth', require('./auth').default);
 
   // All undefined asset or api routes should return a 404
   app.route('/:url(api|auth|components|app|bower_components|assets)/*')
-   .get(errors[404]);
+    .get(errors[404]);
 
   // All other routes should redirect to the index.html
   app.route('/*')

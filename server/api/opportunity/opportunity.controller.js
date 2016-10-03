@@ -11,12 +11,16 @@
 'use strict';
 
 import jsonpatch from 'fast-json-patch';
-import {Opportunity} from '../../sqldb';
+import {Opportunity, File} from '../../sqldb';
 
 function respondWithResult(res, statusCode) {
+  console.log('response', res);
+  console.log('statusCode', statusCode);
   statusCode = statusCode || 200;
-  return function(entity) {
-    if(entity) {
+  return function (entity) {
+    console.log('entity', entity);
+
+    if (entity) {
       return res.status(statusCode).json(entity);
     }
     return null;
@@ -24,10 +28,10 @@ function respondWithResult(res, statusCode) {
 }
 
 function patchUpdates(patches) {
-  return function(entity) {
+  return function (entity) {
     try {
       jsonpatch.apply(entity, patches, /*validate*/ true);
-    } catch(err) {
+    } catch (err) {
       return Promise.reject(err);
     }
 
@@ -36,8 +40,8 @@ function patchUpdates(patches) {
 }
 
 function removeEntity(res) {
-  return function(entity) {
-    if(entity) {
+  return function (entity) {
+    if (entity) {
       return entity.destroy()
         .then(() => {
           res.status(204).end();
@@ -47,8 +51,8 @@ function removeEntity(res) {
 }
 
 function handleEntityNotFound(res) {
-  return function(entity) {
-    if(!entity) {
+  return function (entity) {
+    if (!entity) {
       res.status(404).end();
       return null;
     }
@@ -58,7 +62,7 @@ function handleEntityNotFound(res) {
 
 function handleError(res, statusCode) {
   statusCode = statusCode || 500;
-  return function(err) {
+  return function (err) {
     res.status(statusCode).send(err);
   };
 }
@@ -73,9 +77,12 @@ export function index(req, res) {
 // Gets a single Opportunity from the DB
 export function show(req, res) {
   return Opportunity.find({
-    where: {
-      _id: req.params.id
-    }
+    include: [{
+      model: File,
+      where: {
+        id: req.params.id
+      }
+    }]
   })
     .then(handleEntityNotFound(res))
     .then(respondWithResult(res))
@@ -91,13 +98,13 @@ export function create(req, res) {
 
 // Upserts the given Opportunity in the DB at the specified ID
 export function upsert(req, res) {
-  if(req.body._id) {
-    delete req.body._id;
+  if (req.body.id) {
+    delete req.body.id;
   }
 
   return Opportunity.upsert(req.body, {
     where: {
-      _id: req.params.id
+      id: req.params.id
     }
   })
     .then(respondWithResult(res))
@@ -106,12 +113,12 @@ export function upsert(req, res) {
 
 // Updates an existing Opportunity in the DB
 export function patch(req, res) {
-  if(req.body._id) {
-    delete req.body._id;
+  if (req.body.id) {
+    delete req.body.id;
   }
   return Opportunity.find({
     where: {
-      _id: req.params.id
+      id: req.params.id
     }
   })
     .then(handleEntityNotFound(res))
@@ -124,7 +131,7 @@ export function patch(req, res) {
 export function destroy(req, res) {
   return Opportunity.find({
     where: {
-      _id: req.params.id
+      id: req.params.id
     }
   })
     .then(handleEntityNotFound(res))

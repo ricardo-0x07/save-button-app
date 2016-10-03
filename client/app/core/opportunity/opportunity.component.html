@@ -5,26 +5,26 @@
 					ng-show="$parent.$parent.$ctrl.select" ng-change="$ctrl.selectedChanged()"></h3>
 		</div>
 		<div class="panel-body">
-			<div class="row">
-				<div class="col-xs-12">
-					<img src="{{opportunity.imagePath}}" alt="" class="img-responsive">
-				</div>
-			</div>
-			<div class="row">
-				<div class="col-xs-12">
-					<h1>{{opportunity.name}}</h1>
-				</div>
-			</div>
-			<hr>
-			<div class="row">
-				<div class="col-xs-12">
-					<p>{{opportunity.description}}</p>
-				</div>
-			</div>
 			<div class="col-xs-12">
-				<a ui-sref="updateOpportunity({opportunity: $ctrl.opportunity})">
-					<button>Update</button>
-				</a>
+				<div class="row">
+					<div class="col-xs-12">
+						<!--<img src="{{opportunity.image}}" alt="" class="img-responsive">-->
+						<img data-ng-src="{{$ctrl.getImage($ctrl.opportunity.image)}}" data-err-src="images/spinner.gif" class="img-responsive" />
+					</div>
+				</div>
+				<hr>
+				<div class="row">
+					<button class="btn btn-info" ng-model="collapsed" ng-click="collapsed=!collapsed" title="more info {{$ctrl.opportunity.name}}"
+						id="icon_button" style="float:right;">	Info
+					</button>
+				</div>
+				<hr>
+				<div class="row" ng-show="collapsed" id="more-info-{{$ctrl.opportunity._id}}" style="width:100%; border: solid 1px #ddd; border-radius: 4px;"
+					class="pre-scrollable">
+					<div class="col-xs-12">
+						<p>{{$ctrl.opportunity.description}}</p>
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>

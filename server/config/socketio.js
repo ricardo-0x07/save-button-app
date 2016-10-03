@@ -16,9 +16,8 @@ function onConnect(socket) {
   });
 
   // Insert sockets below
+  require('../api/file/file.socket').register(socket);
   require('../api/opportunity/opportunity.socket').register(socket);
-  require('../api/game/game.socket').register(socket);
-  require('../api/thing/thing.socket').register(socket);
 }
 
 export default function(socketio) {

@@ -1,6 +1,7 @@
 'use strict';
 /*eslint-env node*/
 var webpack = require('webpack');
+var BowerWebpackPlugin = require('bower-webpack-plugin');
 var autoprefixer = require('autoprefixer');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 var HtmlWebpackHarddiskPlugin = require('html-webpack-harddisk-plugin');
@@ -34,7 +35,7 @@ module.exports = function makeWebpackConfig(options) {
      * Should be an empty object if it's generating a test build
      * Karma will set this when it's a test build
      */
-    if(TEST) {
+    if (TEST) {
         config.entry = {};
     } else {
         config.entry = {
@@ -62,7 +63,7 @@ module.exports = function makeWebpackConfig(options) {
      * Should be an empty object if it's generating a test build
      * Karma will handle setting it up for you when it's a test build
      */
-    if(TEST) {
+    if (TEST) {
         config.output = {};
     } else {
         config.output = {
@@ -85,14 +86,15 @@ module.exports = function makeWebpackConfig(options) {
     }
 
     config.resolve = {
-        modulesDirectories: ['node_modules'],
+        modulesDirectories: ['node_modules', 'bower_components'],
         extensions: ['', '.js', '.ts']
     };
 
-    if(TEST) {
+    if (TEST) {
         config.resolve = {
             modulesDirectories: [
-                'node_modules'
+                'node_modules',
+                'bower_components'
             ],
             extensions: ['', '.js', '.ts']
         };
@@ -103,9 +105,9 @@ module.exports = function makeWebpackConfig(options) {
      * Reference: http://webpack.github.io/docs/configuration.html#devtool
      * Type of sourcemap to use per build type
      */
-    if(TEST) {
+    if (TEST) {
         config.devtool = 'inline-source-map';
-    } else if(BUILD || DEV) {
+    } else if (BUILD || DEV) {
         config.devtool = 'source-map';
     } else {
         config.devtool = 'eval';
@@ -141,63 +143,63 @@ module.exports = function makeWebpackConfig(options) {
                 path.resolve(__dirname, 'node_modules/lodash-es/')
             ]
         }, {
-            // TS LOADER
-            // Reference: https://github.com/s-panferov/awesome-typescript-loader
-            // Transpile .ts files using awesome-typescript-loader
-            test: /\.ts$/,
-            loader: 'awesome-typescript-loader',
-            query: {
-                tsconfig: path.resolve(__dirname, 'tsconfig.client.json')
-            },
-            include: [
-                path.resolve(__dirname, 'client/')
-            ]
-        }, {
-            // ASSET LOADER
-            // Reference: https://github.com/webpack/file-loader
-            // Copy png, jpg, jpeg, gif, svg, woff, woff2, ttf, eot files to output
-            // Rename the file using the asset hash
-            // Pass along the updated reference to your code
-            // You can add here any file extension you want to get copied to your output
-            test: /\.(png|jpg|jpeg|gif|svg|woff|woff2|ttf|eot)([\?]?.*)$/,
-            loader: 'file'
-        }, {
+                // TS LOADER
+                // Reference: https://github.com/s-panferov/awesome-typescript-loader
+                // Transpile .ts files using awesome-typescript-loader
+                test: /\.ts$/,
+                loader: 'awesome-typescript-loader',
+                query: {
+                    tsconfig: path.resolve(__dirname, 'tsconfig.client.json')
+                },
+                include: [
+                    path.resolve(__dirname, 'client/')
+                ]
+            }, {
+                // ASSET LOADER
+                // Reference: https://github.com/webpack/file-loader
+                // Copy png, jpg, jpeg, gif, svg, woff, woff2, ttf, eot files to output
+                // Rename the file using the asset hash
+                // Pass along the updated reference to your code
+                // You can add here any file extension you want to get copied to your output
+                test: /\.(png|jpg|jpeg|gif|svg|woff|woff2|ttf|eot)([\?]?.*)$/,
+                loader: 'file'
+            }, {
 
-            // HTML LOADER
-            // Reference: https://github.com/webpack/raw-loader
-            // Allow loading html through js
-            test: /\.html$/,
-            loader: 'raw'
-        }, {
-            // CSS LOADER
-            // Reference: https://github.com/webpack/css-loader
-            // Allow loading css through js
-            //
-            // Reference: https://github.com/postcss/postcss-loader
-            // Postprocess your css with PostCSS plugins
-            test: /\.css$/,
-            loader: !TEST
-                // Reference: https://github.com/webpack/extract-text-webpack-plugin
-                // Extract css files in production builds
+                // HTML LOADER
+                // Reference: https://github.com/webpack/raw-loader
+                // Allow loading html through js
+                test: /\.html$/,
+                loader: 'raw'
+            }, {
+                // CSS LOADER
+                // Reference: https://github.com/webpack/css-loader
+                // Allow loading css through js
                 //
-                // Reference: https://github.com/webpack/style-loader
-                // Use style-loader in development for hot-loading
-                ? ExtractTextPlugin.extract('style', 'css?sourceMap!postcss')
-                // Reference: https://github.com/webpack/null-loader
-                // Skip loading css in test mode
-                : 'null'
-        }, {
-            // SASS LOADER
-            // Reference: https://github.com/jtangelder/sass-loader
-            test: /\.(scss|sass)$/,
-            loaders: ['style', 'css', 'sass'],
-            include: [
-                path.resolve(__dirname, 'node_modules/bootstrap-sass/assets/stylesheets/*.scss'),
-                path.resolve(__dirname, 'client/app/app.scss')
-            ]
+                // Reference: https://github.com/postcss/postcss-loader
+                // Postprocess your css with PostCSS plugins
+                test: /\.css$/,
+                loader: !TEST
+                    // Reference: https://github.com/webpack/extract-text-webpack-plugin
+                    // Extract css files in production builds
+                    //
+                    // Reference: https://github.com/webpack/style-loader
+                    // Use style-loader in development for hot-loading
+                    ? ExtractTextPlugin.extract('style', 'css?sourceMap!postcss')
+                    // Reference: https://github.com/webpack/null-loader
+                    // Skip loading css in test mode
+                    : 'null'
+            }, {
+                // SASS LOADER
+                // Reference: https://github.com/jtangelder/sass-loader
+                test: /\.(scss|sass)$/,
+                loaders: ['style', 'css', 'sass'],
+                include: [
+                    path.resolve(__dirname, 'node_modules/bootstrap-sass/assets/stylesheets/*.scss'),
+                    path.resolve(__dirname, 'client/app/app.scss')
+                ]
 
 
-        }]
+            }]
     };
 
     config.module.postLoaders = [{
@@ -240,8 +242,18 @@ module.exports = function makeWebpackConfig(options) {
             disable: !BUILD || TEST
         })
     ];
-
-    if(!TEST) {
+    config.plugins.push(new webpack.ResolverPlugin(
+        new webpack.ResolverPlugin.DirectoryDescriptionFilePlugin(".bower.json", ["main"])
+    ));
+    // config.plugins.push(new webpack.ResolverPlugin(
+    //     new BowerWebpackPlugin({
+    //         modulesDirectories: ["bower_components"],
+    //         manifestFiles: "bower.json",
+    //         includes: /.*/,
+    //         excludes: [],
+    //         searchResolveModulesDirectories: true
+    //     })));
+    if (!TEST) {
         config.plugins.push(new CommonsChunkPlugin({
             name: 'vendor',
 
@@ -263,12 +275,12 @@ module.exports = function makeWebpackConfig(options) {
         alwaysWriteToDisk: true
     }
     config.plugins.push(
-      new HtmlWebpackPlugin(htmlConfig),
-      new HtmlWebpackHarddiskPlugin()
+        new HtmlWebpackPlugin(htmlConfig),
+        new HtmlWebpackHarddiskPlugin()
     );
 
     // Add build specific plugins
-    if(BUILD) {
+    if (BUILD) {
         config.plugins.push(
             // Reference: http://webpack.github.io/docs/list-of-plugins.html#noerrorsplugin
             // Only emit files when there are no errors
@@ -300,7 +312,7 @@ module.exports = function makeWebpackConfig(options) {
         );
     }
 
-    if(DEV) {
+    if (DEV) {
         config.plugins.push(
             // Reference: https://webpack.github.io/docs/list-of-plugins.html#defineplugin
             // Define free global variables
@@ -314,7 +326,7 @@ module.exports = function makeWebpackConfig(options) {
 
     config.cache = DEV;
 
-    if(TEST) {
+    if (TEST) {
         config.stats = {
             colors: true,
             reasons: true

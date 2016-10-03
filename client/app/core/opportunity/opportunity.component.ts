@@ -6,8 +6,8 @@ export interface IOpportunity {
   imagePath: string;
   description: string;
   location: string;
-  created_at ?: string;
-  updated_at ?: string;
+  created_at?: string;
+  updated_at?: string;
 };
 
 
@@ -17,8 +17,15 @@ export class opportunityComponent {
   constructor() {
     this.message = 'World';
     console.log('this', this);
+    console.log('this.opportunity', this.opportunity);
+    // console.log('this.opportunity', this.opportunity);
 
   }
+  getImage(data) {
+    // console.log('data', data);
+    return 'data:image/jpeg;base64,' + data;
+  }
+
 }
 
 export default angular.module('saveButtonAppApp.opportunity', [])

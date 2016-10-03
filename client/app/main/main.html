@@ -1,28 +1,51 @@
-<header class="hero-unit" id="banner">
-  <div class="container">
-    <h1>'Allo, 'Allo!</h1>
-    <p class="lead">Kick-start your next web app with Angular Fullstack</p>
-    <img src="assets/images/yeoman.png" alt="I'm Yeoman">
-  </div>
+<header class="hero-unit hidden-xs" id="banner">
+	<div class="container">
+		<h1>Save Button!</h1>
+		<p class="lead">Hunt for Your Next Bargain</p>
+		<img src="assets/images/save-button.png" alt="I'm Yeoman">
+	</div>
 </header>
 
 <div class="container">
-  <div class="row">
-    <div class="col-lg-12">
-      <h1 class="page-header">Features:</h1>
-      <ul class="nav nav-tabs nav-stacked col-md-4 col-lg-4 col-sm-6" ng-repeat="thing in $ctrl.awesomeThings">
-        <li><a href="#" uib-tooltip="{{thing.info}}">{{thing.name}}<button type="button" class="close" ng-click="$ctrl.deleteThing(thing)">&times;</button></a></li>
-      </ul>
-    </div>
-  </div>
-
-  <form class="thing-form">
-    <label>Syncs in realtime across clients</label>
-    <p class="input-group">
-      <input type="text" class="form-control" placeholder="Add a new thing here." ng-model="$ctrl.newThing">
-      <span class="input-group-btn">
-        <button type="submit" class="btn btn-primary" ng-click="$ctrl.addThing()">Add New</button>
-      </span>
-    </p>
-  </form>
+	<div class='row'>
+		<div class='col-xs-12'>
+			<form style="width: 90%; margin: auto; margin: auto;">
+				<label for="search-opportunities" class="form-label">Search:</label>
+				<input autofocused ng-model="$ctrl.query" type='text' id="search-opportunities" class='form-control' placeholder='Search Opportunities'></input>
+			</form>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-lg-12">
+			<!--<h1 class="page-header">Opportunities:</h1>-->
+			<opportunity class="col-xs-12 col-sm-6 col-md-4 col-lg-3" ng-repeat="opportunity in $ctrl.awesomeOpportunities | filter:$ctrl.query | orderBy:opportunity.name track by opportunity._id"
+				opportunity="opportunity">
+			</opportunity>
+		</div>
+	</div>
+	<nav class="navbar navbar-inverse navbar-fixed-bottom">
+		<div class="container">
+			<!--<form class="form-inline" style="width: 90%; margin: auto;">
+				<div class="form-group">
+					<label style="color: #fff;">{{$ctrl.selected.length}} Opportunities Selected</label>
+					<a ng-click="$ctrl.addTo()">
+						<button>Add TO</button>
+					</a>
+				</div>
+			</form>-->
+			<form class="opportunity-form" class="form-inline" >
+				<!--<p class="input-group">-->
+					<input type="file" class="form-control" ng-model="$ctrl.newOpportunity.myfile" accept="image/*" minsize="500" required base-sixty-four-input
+						onload="$ctrl.onload()">
+					<span ng-show="form.files.$error.maxsize">Files must not exceed 500 KB</span>
+					<!--<a ng-click="files=null" class="help-block btn btn-default">Clear input</a>-->
+					<input type="text" class="form-control" placeholder="Kindly add a new opportunity here." ng-model="$ctrl.newOpportunity.name">
+					<input type="text" class="form-control" placeholder="Kindly enter a brief description." ng-model="$ctrl.newOpportunity.description">
+					<span class="input-group-btn">
+        				<button type="submit" class="btn btn-primary" ng-click="$ctrl.addOpportunities()" style="width: 100%;">Add New</button>
+      				</span>
+				<!--</p>-->
+			</form>
+		</div>
+	</nav>
 </div>
