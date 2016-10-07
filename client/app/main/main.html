@@ -23,8 +23,8 @@
 			</opportunity>
 		</div>
 	</div>
-	<nav class="navbar navbar-inverse navbar-fixed-bottom">
-		<div class="container">
+	<nav class="navbar navbar-default navbar-fixed-bottom" style="min-height: 0;">
+		<div class="" ng-show="collapse">
 			<!--<form class="form-inline" style="width: 90%; margin: auto;">
 				<div class="form-group">
 					<label style="color: #fff;">{{$ctrl.selected.length}} Opportunities Selected</label>
@@ -35,17 +35,26 @@
 			</form>-->
 			<form class="opportunity-form" class="form-inline" >
 				<!--<p class="input-group">-->
-					<input type="file" class="form-control" ng-model="$ctrl.newOpportunity.File" accept="image/*" minsize="500" required base-sixty-four-input
+					<div class="row" style="width: 100%; margin: auto; margin: auto; background-color: #fff;" ng-show="$ctrl.File">
+						<div class="col-xs-12">
+							<img data-ng-src="{{'data:' + $ctrl.File.filetype + ';base64,' + $ctrl.File.base64}}" data-err-src="images/spinner.gif" class="img-responsive" >
+						</div>
+					</div>
+					<input id="imgInp"  type="file" class="form-control" ng-model="$ctrl.File" accept="image/*" minsize="500" required base-sixty-four-input
 						onload="$ctrl.onload()">
 					<span ng-show="form.files.$error.maxsize">Files must not exceed 500 KB</span>
 					<!--<a ng-click="files=null" class="help-block btn btn-default">Clear input</a>-->
 					<input type="text" class="form-control" placeholder="Kindly add a new opportunity here." ng-model="$ctrl.newOpportunity.name">
 					<input type="text" class="form-control" placeholder="Kindly enter a brief description." ng-model="$ctrl.newOpportunity.description">
 					<span class="input-group-btn">
-        				<button type="submit" class="btn btn-primary" ng-click="$ctrl.addOpportunities()" style="width: 100%;">Add New</button>
+        				<button type="submit" class="btn btn-primary" ng-click="$ctrl.addOpportunities()" style="width: 100%;">Add New Opportunity</button>
       				</span>
 				<!--</p>-->
 			</form>
 		</div>
+		<!--<span class="input-group-btn">-->
+    		<button type="submit" class="btn btn-primary" ng-click="collapse = !collapse" style="width: 100%;" >{{collapse ? 'Hide' : 'Show'}}</button>
+        <!--</span>-->
+		<!--<footer></footer>-->
 	</nav>
 </div>

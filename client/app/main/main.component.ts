@@ -9,7 +9,8 @@ export class MainController {
   socket;
   awesomeOpportunities = [];
   newOpportunity = '';
-  public myFile = null;
+  image = {};
+  public File;
 
   /*@ngInject*/
   constructor($http, $scope, socket) {
@@ -41,24 +42,24 @@ export class MainController {
     console.log('this.newOpportunity', this.newOpportunity);
     if (this.newOpportunity) {
       var newFile = {};
-      var File = this.newOpportunity.File;
-      newFile.name = File.filename;
-      newFile.type = File.filetype;
-      newFile.size = File.filesize;
-      newFile.base64 = File.base64;
+      // this.File = this.newOpportunity.File;
+      newFile.name = this.File.filename;
+      newFile.type = this.File.filetype;
+      newFile.size = this.File.filesize;
+      newFile.base64 = this.File.base64;
       this.newOpportunity.File = newFile;
       // console.log('File', File);
       // this.newOpportunity = lodash.omit(this.newOpportunity, ['File']);
       // console.log('this.newOpportunity less file: ', this.newOpportunity);
       this.$http.post('/api/opportunities', this.newOpportunity)
-      // .then(function(response) {
-      //   console.log('response', response);
-      //   File.OpportunityId = response.data.id;
-      //   return this.$http.post('/api/files', File)
-      // })
-      .then(function(response) {
-        console.log('response', response);
-      });
+        // .then(function(response) {
+        //   console.log('response', response);
+        //   File.OpportunityId = response.data.id;
+        //   return this.$http.post('/api/files', File)
+        // })
+        .then(function (response) {
+          console.log('response', response);
+        });
       this.newOpportunity = '';
     }
   }
@@ -74,8 +75,37 @@ export class MainController {
   //   }
   // };
   onload() {
-    console.log('this', this);
+    // console.log('event', event);
+    // console.log('reader', reader);
+    // console.log('file', file);
+    // console.log('this', this);
+    // console.log('fileList', fileList);
+    // console.log('fileObjs', fileObjs);
+    // console.log('this.newOpportunity', this.newOpportunity);
+    // console.log('$ctrl.newOpportunity', $ctrl.newOpportunity);
+    // var File = this.newOpportunity['File'];
+    // console.log('File', File);
+    // this.image = 'data:' + fileList[0].filetype + ';base64,' + fileList[0].base64;
+    // this.image.dataUrl = 'data:' + this.File.filetype + ';base64,' + this.File.base64;
   }
+  getImage() {
+    console.log('this.newOpportunity', this.newOpportunity);
+    var imageData = 'data:' + this.newOpportunity.File.filetype + ';base64,' + this.newOpportunity.File.base64;
+    console.log('imageData', imageData);
+    return imageData;
+  }
+
+  // angular.element("#imgInp").change(() => {
+  //   if (this.files && this.files[0]) {
+  //     var reader = new FileReader();
+
+  //     reader.onload = function (e) {
+  //       angular.element('#blah').attr('src', e.target.result);
+  //     }
+
+  //     reader.readAsDataURL(this.files[0]);
+  //   }
+  // })
 }
 
 export default angular.module('saveButtonAppApp.main', [
