@@ -6,10 +6,10 @@
 	</div>
 </header>
 
-<div class="container">
+<div class="container" style="padding-top: 55px;">
 	<div class='row'>
 		<div class='col-xs-12'>
-			<form style="width: 90%; margin: auto; margin: auto;">
+			<form style="width: 100%; margin: auto; margin: auto;">
 				<label for="search-opportunities" class="form-label">Search:</label>
 				<input autofocused ng-model="$ctrl.query" type='text' id="search-opportunities" class='form-control' placeholder='Search Opportunities'></input>
 			</form>
@@ -18,7 +18,7 @@
 	<div class="row">
 		<div class="col-lg-12">
 			<!--<h1 class="page-header">Opportunities:</h1>-->
-			<opportunity class="col-xs-12 col-sm-6 col-md-4 col-lg-3" ng-repeat="opportunity in $ctrl.awesomeOpportunities | filter:$ctrl.query | orderBy:opportunity.name track by opportunity.id"
+			<opportunity class="col-xs-12 col-sm-6 col-md-4" ng-repeat="opportunity in $ctrl.awesomeOpportunities | filter:$ctrl.query | orderBy:opportunity.name track by opportunity.id"
 				opportunity="opportunity">
 			</opportunity>
 		</div>
@@ -44,8 +44,8 @@
 						onload="$ctrl.onload()">
 					<span ng-show="form.files.$error.maxsize">Files must not exceed 500 KB</span>
 					<!--<a ng-click="files=null" class="help-block btn btn-default">Clear input</a>-->
-					<input type="text" class="form-control" placeholder="Kindly add a new opportunity here." ng-model="$ctrl.newOpportunity.name">
-					<input type="text" class="form-control" placeholder="Kindly enter a brief description." ng-model="$ctrl.newOpportunity.description">
+					<input type="text" class="form-control" placeholder="Add a new opportunity here." ng-model="$ctrl.newOpportunity.description">
+					<!--<input type="text" class="form-control" placeholder="Kindly enter a brief description." ng-model="$ctrl.newOpportunity.description">-->
 					<span class="input-group-btn">
         				<button type="submit" class="btn btn-primary" ng-click="$ctrl.addOpportunities()" style="width: 100%;">Add New Opportunity</button>
       				</span>

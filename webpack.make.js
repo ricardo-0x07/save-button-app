@@ -1,6 +1,7 @@
 'use strict';
 /*eslint-env node*/
 var webpack = require('webpack');
+import packageJson from './package.json';
 var BowerWebpackPlugin = require('bower-webpack-plugin');
 var autoprefixer = require('autoprefixer');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
@@ -10,6 +11,44 @@ var CommonsChunkPlugin = webpack.optimize.CommonsChunkPlugin;
 var fs = require('fs');
 var path = require('path');
 var ForkCheckerPlugin = require('awesome-typescript-loader').ForkCheckerPlugin;
+var SWPrecacheWebpackPlugin = require('sw-precache-webpack-plugin');
+// sw-precache-webpack-plugin configurations
+var SERVICE_WORKER_FILENAME = 'my-service-worker.js';
+var SERVICE_WORKER_CACHEID = packageJson.name;
+var SERVICE_WORKER_IGONRE_PATTERNS = [/dist\/.*\.html/];
+var staticRootDir = './client'
+import opportunitiesIndexedDbService from './client/app/core/services/opportunitiesIndexedDb/indexedDb';
+
+var SW_PRECACHE_CONFIG = {
+    cacheId: require('./package.json').name,
+    // replacePrefix: '/',
+    filename: SERVICE_WORKER_FILENAME,
+    importScripts: [
+        "/lib/idb/lib/idb.js"
+    ],
+    staticFileGlobs: [
+        // rootDir + '/bower_components/**/*.{html,js,css}',
+        // rootDir + '/elements/**',
+        staticRootDir + '/assets/fonts/**',
+        // staticRootDir + '/app/**.css',
+        staticRootDir + '/index.html',
+        staticRootDir + '/lib/idb/lib/idb.js',
+        staticRootDir + '/favicon.ico',
+        staticRootDir + '/app/**/*.html',
+        staticRootDir + '/components/**/*.html',
+        staticRootDir + '/assets/images/**.*'
+    ],
+    stripPrefix: staticRootDir + '/',
+    runtimeCaching: [
+        {
+            handler: 'cacheFirst',
+            urlPattern: /[.]js$/,
+        }, {
+            handler: opportunitiesIndexedDbService.myIdbHandler,
+            urlPattern: /\/api\/opportunities$/
+        }
+    ]
+};
 
 module.exports = function makeWebpackConfig(options) {
     /**
@@ -52,7 +91,8 @@ module.exports = function makeWebpackConfig(options) {
                 'angular-socket-io',
                 'angular-ui-bootstrap',
                 'angular-ui-router',
-                'lodash'
+                'lodash',
+                'idb'
             ]
         };
     }
@@ -143,63 +183,63 @@ module.exports = function makeWebpackConfig(options) {
                 path.resolve(__dirname, 'node_modules/lodash-es/')
             ]
         }, {
-                // TS LOADER
-                // Reference: https://github.com/s-panferov/awesome-typescript-loader
-                // Transpile .ts files using awesome-typescript-loader
-                test: /\.ts$/,
-                loader: 'awesome-typescript-loader',
-                query: {
-                    tsconfig: path.resolve(__dirname, 'tsconfig.client.json')
-                },
-                include: [
-                    path.resolve(__dirname, 'client/')
-                ]
-            }, {
-                // ASSET LOADER
-                // Reference: https://github.com/webpack/file-loader
-                // Copy png, jpg, jpeg, gif, svg, woff, woff2, ttf, eot files to output
-                // Rename the file using the asset hash
-                // Pass along the updated reference to your code
-                // You can add here any file extension you want to get copied to your output
-                test: /\.(png|jpg|jpeg|gif|svg|woff|woff2|ttf|eot)([\?]?.*)$/,
-                loader: 'file'
-            }, {
+            // TS LOADER
+            // Reference: https://github.com/s-panferov/awesome-typescript-loader
+            // Transpile .ts files using awesome-typescript-loader
+            test: /\.ts$/,
+            loader: 'awesome-typescript-loader',
+            query: {
+                tsconfig: path.resolve(__dirname, 'tsconfig.client.json')
+            },
+            include: [
+                path.resolve(__dirname, 'client/')
+            ]
+        }, {
+            // ASSET LOADER
+            // Reference: https://github.com/webpack/file-loader
+            // Copy png, jpg, jpeg, gif, svg, woff, woff2, ttf, eot files to output
+            // Rename the file using the asset hash
+            // Pass along the updated reference to your code
+            // You can add here any file extension you want to get copied to your output
+            test: /\.(png|jpg|jpeg|gif|svg|woff|woff2|ttf|eot)([\?]?.*)$/,
+            loader: 'file'
+        }, {
 
-                // HTML LOADER
-                // Reference: https://github.com/webpack/raw-loader
-                // Allow loading html through js
-                test: /\.html$/,
-                loader: 'raw'
-            }, {
-                // CSS LOADER
-                // Reference: https://github.com/webpack/css-loader
-                // Allow loading css through js
+            // HTML LOADER
+            // Reference: https://github.com/webpack/raw-loader
+            // Allow loading html through js
+            test: /\.html$/,
+            loader: 'raw'
+        }, {
+            // CSS LOADER
+            // Reference: https://github.com/webpack/css-loader
+            // Allow loading css through js
+            //
+            // Reference: https://github.com/postcss/postcss-loader
+            // Postprocess your css with PostCSS plugins
+            test: /\.css$/,
+            loader: !TEST
+                // Reference: https://github.com/webpack/extract-text-webpack-plugin
+                // Extract css files in production builds
                 //
-                // Reference: https://github.com/postcss/postcss-loader
-                // Postprocess your css with PostCSS plugins
-                test: /\.css$/,
-                loader: !TEST
-                    // Reference: https://github.com/webpack/extract-text-webpack-plugin
-                    // Extract css files in production builds
-                    //
-                    // Reference: https://github.com/webpack/style-loader
-                    // Use style-loader in development for hot-loading
-                    ? ExtractTextPlugin.extract('style', 'css?sourceMap!postcss')
-                    // Reference: https://github.com/webpack/null-loader
-                    // Skip loading css in test mode
-                    : 'null'
-            }, {
-                // SASS LOADER
-                // Reference: https://github.com/jtangelder/sass-loader
-                test: /\.(scss|sass)$/,
-                loaders: ['style', 'css', 'sass'],
-                include: [
-                    path.resolve(__dirname, 'node_modules/bootstrap-sass/assets/stylesheets/*.scss'),
-                    path.resolve(__dirname, 'client/app/app.scss')
-                ]
+                // Reference: https://github.com/webpack/style-loader
+                // Use style-loader in development for hot-loading
+                ? ExtractTextPlugin.extract('style', 'css?sourceMap!postcss')
+                // Reference: https://github.com/webpack/null-loader
+                // Skip loading css in test mode
+                : 'null'
+        }, {
+            // SASS LOADER
+            // Reference: https://github.com/jtangelder/sass-loader
+            test: /\.(scss|sass)$/,
+            loaders: ['style', 'css', 'sass'],
+            include: [
+                path.resolve(__dirname, 'node_modules/bootstrap-sass/assets/stylesheets/*.scss'),
+                path.resolve(__dirname, 'client/app/app.scss')
+            ]
 
 
-            }]
+        }]
     };
 
     config.module.postLoaders = [{
@@ -240,7 +280,8 @@ module.exports = function makeWebpackConfig(options) {
         // Disabled when in test mode or not in build mode
         new ExtractTextPlugin('[name].[hash].css', {
             disable: !BUILD || TEST
-        })
+        }),
+        new SWPrecacheWebpackPlugin(SW_PRECACHE_CONFIG)
     ];
     config.plugins.push(new webpack.ResolverPlugin(
         new webpack.ResolverPlugin.DirectoryDescriptionFilePlugin(".bower.json", ["main"])

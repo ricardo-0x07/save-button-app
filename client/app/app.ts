@@ -27,6 +27,8 @@ import home from './components/home/home.component';
 import opportunities from './components/opportunities/opportunities.component';
 import opportunity from './core/opportunity/opportunity.component';
 import opportunityService from './core/services/opportunity/opportunity.service';
+import swPrecacheReg from './core/services/preCacheServiceWorker/preCacheServiceWorker.service';
+// import opportunitiesIndexedDbService from './core/services/opportunitiesIndexedDb/indexedDb';
 
 import './app.scss';
 angular.module('saveButtonAppApp', [
@@ -52,10 +54,14 @@ angular.module('saveButtonAppApp', [
   home,
   opportunity,
   opportunities,
+  swPrecacheReg,
+  // opportunitiesIndexedDbService,
   opportunityService
 ])
   .config(routeConfig)
-  .run(function($rootScope, $location, Auth) {
+  .run(function($rootScope, $location, Auth, preCacheServiceWorker) {
+    preCacheServiceWorker._registerServiceWorker();
+    console.log('preCacheServiceWorker', preCacheServiceWorker);
     'ngInject';
     // Redirect to login if route requires auth and you're not logged in
     $rootScope.$on('$stateChangeStart', function(event, next) {
