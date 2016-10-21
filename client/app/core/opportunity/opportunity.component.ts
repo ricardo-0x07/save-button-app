@@ -15,14 +15,14 @@ export class opportunityComponent {
   public opportunity: IOpportunity;
   /*@ngInject*/
   constructor() {
-    this.message = 'World';
-    console.log('this', this);
-    console.log('this.opportunity', this.opportunity);
+    // this.message = 'World';
+    // console.log('this', this);
+    // console.log('this.opportunity', this.opportunity);
     // console.log('this.opportunity', this.opportunity);
 
   }
   getImage(data) {
-    console.log('data', data);
+    // console.log('data', data);
     return 'data:' + data.type + ';base64,' + data.base64;
   }
 

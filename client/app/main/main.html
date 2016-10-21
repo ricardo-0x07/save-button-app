@@ -54,6 +54,9 @@
 		</div>
 		<!--<span class="input-group-btn">-->
     		<button type="submit" class="btn btn-primary" ng-click="collapse = !collapse" style="width: 100%;" >{{collapse ? 'Hide' : 'Show'}}</button>
+			 <div ng-show="$ctrl.preCacheServiceWorker.displaySubBtnFn()">
+				 <button id="subscribe" ng-click="$ctrl.preCacheServiceWorker.notifyMe()" >{{$ctrl.preCacheServiceWorker.isPushEnabled ? 'Unsubscribe from Push Messaging' : 'Subscribe to Push notifications'}}</button>
+			 </div>
         <!--</span>-->
 		<!--<footer></footer>-->
 	</nav>

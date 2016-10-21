@@ -6,6 +6,7 @@ const lodash = require('lodash');
 
 export class MainController {
   $http;
+  preCacheServiceWorker;
   socket;
   awesomeOpportunities = [];
   newOpportunity = '';
@@ -13,9 +14,10 @@ export class MainController {
   public File;
 
   /*@ngInject*/
-  constructor($http, $scope, socket) {
+  constructor($http, $scope, socket, preCacheServiceWorker) {
     this.$http = $http;
     this.socket = socket;
+    this.preCacheServiceWorker = preCacheServiceWorker;
 
     $scope.$on('$destroy', function () {
       socket.unsyncUpdates('opportunity');

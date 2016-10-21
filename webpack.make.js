@@ -92,7 +92,9 @@ module.exports = function makeWebpackConfig(options) {
                 'angular-ui-bootstrap',
                 'angular-ui-router',
                 'lodash',
-                'idb'
+                'idb',
+                'jquery',
+                'notifyjs'
             ]
         };
     }

@@ -381,6 +381,7 @@ gulp.task('serve', cb => {
             'lint:scripts',
             'inject',
             'copy:fonts:dev',
+            'copy:manifest',
             'env:all',
             'typings'
         ],
@@ -515,6 +516,7 @@ gulp.task('build', cb => {
         [
             'copy:extras',
             'copy:assets',
+            'copy:manifest',
             'copy:fonts:dist',
             'copy:server',
             'webpack:dist'
@@ -598,7 +600,10 @@ gulp.task('copy:assets', () => {
     return gulp.src([paths.client.assets, '!' + paths.client.images])
         .pipe(gulp.dest(`${paths.dist}/${clientPath}/assets`));
 });
-
+gulp.task('copy:manifest', () => {
+    return gulp.src('manifest.json')
+        .pipe(gulp.dest(`.tmp`));
+});
 gulp.task('copy:server', () => {
     return gulp.src([
         'package.json'

@@ -1,0 +1,12 @@
+{  
+  "name": "Save Button App",  
+  "short_name": "Save Button",  
+  "icons": [{  
+        "src": "push-icon.png",  
+        "sizes": "111x111",
+        "type": "image/png" 
+      }],  
+  "start_url": "/index.html",  
+  "display": "standalone",  
+  "gcm_sender_id": "658791564919"    
+}
