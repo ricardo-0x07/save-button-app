@@ -14,6 +14,7 @@ var db = {
 };
 
 // Insert models below
+db.Subscription = db.sequelize.import('../api/subscription/subscription.model');
 db.File = db.sequelize.import('../api/file/file.model');
 db.Opportunity = db.sequelize.import('../api/opportunity/opportunity.model');
 db.User = db.sequelize.import('../api/user/user.model');

@@ -12,8 +12,45 @@
 
 import jsonpatch from 'fast-json-patch';
 import sqldb from '../../sqldb';
-import {Opportunity, File} from '../../sqldb';
+import { Opportunity, File } from '../../sqldb';
+var webPush = require('web-push');
+webPush.setGCMAPIKey('AIzaSyCiHGnS84m-QlGEJXDvGS0zoMUBCw7cn7c');
 
+// Send Push Notification to Opportunity Notification Subscribers
+function sendPushNotification() {
+  sqldb.Subscription.findAll()
+    .then(function (response) {
+      console.log('subcriptions', response);
+      var i;
+      for (i = 0; i < (response.length); i++) {
+        console.log('response[i]', response[i]);
+        var subscriber = response[i].dataValues;
+        console.log('subscriber.subscription', JSON.parse(subscriber.subscription));
+        var pushSubscription = JSON.parse(subscriber.subscription);
+        // var pushSubscription = {
+        //   endpoint: subscriber.endpoint,
+        //   keys: {
+        //     p256dh: subscriber.p256dh,
+        //     auth: subscriber.auth
+        //   }
+        // };
+        console.log('subcriber', subscriber);
+        console.log('pushSubscription', pushSubscription);
+        console.log('subcriber.endpoint', subscriber.endpoint);
+        webPush.sendNotification(pushSubscription, JSON.stringify({
+          action: 'chatMsg',
+          name: 'Opportunity',
+          msg: 'New opportunity logged'
+        }))
+        .then(function(response) {
+          console.log('push notification response', response);
+        })
+        .catch(function(error) {
+          console.log('push notification error', error);
+        });
+      };
+    });
+}
 function respondWithResult(res, statusCode) {
   statusCode = statusCode || 200;
   return function (entity) {
@@ -68,7 +105,7 @@ function handleError(res, statusCode) {
 
 // Gets a list of Opportunitys
 export function index(req, res) {
-  return Opportunity.findAll({include: [{model: sqldb.File}]})
+  return Opportunity.findAll({ include: [{ model: sqldb.File }] })
     .then(respondWithResult(res))
     .catch(handleError(res));
 }
@@ -90,8 +127,9 @@ export function show(req, res) {
 
 // Creates a new Opportunity in the DB
 export function create(req, res) {
-  return Opportunity.create(req.body, {include: [sqldb.File]})
+  return Opportunity.create(req.body, { include: [sqldb.File] })
     .then(respondWithResult(res, 201))
+    .then(sendPushNotification)
     .catch(handleError(res));
 }
 

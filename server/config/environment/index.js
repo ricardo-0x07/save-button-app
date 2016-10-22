@@ -61,7 +61,9 @@ var all = {
     clientID: process.env.GOOGLE_ID || 'id',
     clientSecret: process.env.GOOGLE_SECRET || 'secret',
     callbackURL: `${process.env.DOMAIN || ''}/auth/google/callback`
-  }
+  },
+
+  fcm_api_key: 'AIzaSyCiHGnS84m-QlGEJXDvGS0zoMUBCw7cn7c'
 };
 
 // Export the config object based on the NODE_ENV

@@ -9,6 +9,7 @@ import 'angular-socket-io';
 
 const uiRouter = require('angular-ui-router');
 const uiBootstrap = require('angular-ui-bootstrap');
+const uiNotification = require('angular-ui-notification');
 // const ngMessages = require('angular-messages');
 // import ngValidationMatch from 'angular-validation-match';
 
@@ -26,6 +27,7 @@ import socket from '../components/socket/socket.service';
 import home from './components/home/home.component';
 import opportunities from './components/opportunities/opportunities.component';
 import opportunity from './core/opportunity/opportunity.component';
+import toast from './core/toast/toast.component';
 import opportunityService from './core/services/opportunity/opportunity.service';
 import swPrecacheReg from './core/services/preCacheServiceWorker/preCacheServiceWorker.service';
 // import opportunitiesIndexedDbService from './core/services/opportunitiesIndexedDb/indexedDb';
@@ -42,6 +44,7 @@ angular.module('saveButtonAppApp', [
 
   uiRouter,
   uiBootstrap,
+  uiNotification,
 
   _Auth,
   account,
@@ -53,6 +56,7 @@ angular.module('saveButtonAppApp', [
   util,
   home,
   opportunity,
+  toast,
   opportunities,
   swPrecacheReg,
   // opportunitiesIndexedDbService,

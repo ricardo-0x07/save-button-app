@@ -9,6 +9,7 @@ import path from 'path';
 
 export default function (app) {
   // Insert routes below
+  app.use('/api/subscriptions', require('./api/subscription'));
   console.log('before index');
   app.use('/api/files', require('./api/file'));
   console.log('after index');

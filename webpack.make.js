@@ -24,7 +24,9 @@ var SW_PRECACHE_CONFIG = {
     // replacePrefix: '/',
     filename: SERVICE_WORKER_FILENAME,
     importScripts: [
-        "/lib/idb/lib/idb.js"
+        "/lib/idb/lib/idb.js",
+        "/lib/swImports.js"
+
     ],
     staticFileGlobs: [
         // rootDir + '/bower_components/**/*.{html,js,css}',
@@ -94,7 +96,8 @@ module.exports = function makeWebpackConfig(options) {
                 'lodash',
                 'idb',
                 'jquery',
-                'notifyjs'
+                'notifyjs',
+                'angular-ui-notification'
             ]
         };
     }

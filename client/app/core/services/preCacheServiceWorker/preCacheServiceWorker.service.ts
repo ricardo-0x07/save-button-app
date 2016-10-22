@@ -3,7 +3,7 @@ const angular = require('angular');
 var $: JQueryStatic = require('jquery');
 var Notify = require('notifyjs').default;
 
-export function preCacheServiceWorkerService($state, $window, $document) {
+export function preCacheServiceWorkerService($state, $window, $document, $http, $rootScope) {
   'ngInject';
   var isPushEnabled = false;
   var displaySubBtn = true;
@@ -12,26 +12,10 @@ export function preCacheServiceWorkerService($state, $window, $document) {
   var _that = this;
   var reg;
 
-  var subBtn = $document.find('subscribe');
-  subBtn.prop('disabled', true);
-
-  console.log('subBtn', subBtn);
-  // var myNotification = new Notify('Yo dawg!', {
-  //   body: 'This is an awesome notification',
-  //   notifyShow: onNotifyShow
-  // });
-
-  // function onNotifyShow() {
-  //   console.log('notification was shown!');
-  // }
   // AngularJS will instantiate a singleton by calling "new" on this function
   return {
     _registerServiceWorker() {
       var _that = this;
-      // if (Notify.isSupported()) {
-      //   Notify.requestPermission();
-      // }
-
       // Request permission to send user nitification if needed
       if (!Notify.needsPermission) {
         this.doNotification();
@@ -39,22 +23,9 @@ export function preCacheServiceWorkerService($state, $window, $document) {
         Notify.requestPermission(_that.onPermissionGranted, _that.onPermissionDenied);
       }
 
-      // myNotification.show();
-
       if (isPushEnabled) {
         console.log('isPushEnabled');
       }
-      console.log("subBtn.on('click', function () {");
-      // subBtn.on('click', function () {
-      //   console.log('subcription button clicked');
-      //   if (isPushEnabled) {
-      //     _that.unsubscribe();
-      //   } else {
-      //     _that.subscribe();
-      //   }
-      // });
-      // console.log('subBtn', subBtn)
-
       // Check if browser supports service worker.
       if (!navigator.serviceWorker) {
         console.log('this browser does NOT support service worker');
@@ -74,23 +45,17 @@ export function preCacheServiceWorkerService($state, $window, $document) {
 
         if (registration.installing) {
           serviceWorker = registration.installing;
+          _that.trackInstalling(serviceWorker);
         } else if (registration.waiting) {
           serviceWorker = registration.waiting;
+          _that.updateReady(serviceWorker);
         } else if (registration.active) {
           serviceWorker = registration.active;
         }
-        if (serviceWorker) {
-          // console.log(serviceWorker.state);
-          serviceWorker.onstatechange = function (e: any) {
-            // console.log(e.target.state);
-          };
-        }
-
         registration.onupdatefound = function () {
           console.log('updated service worker found');
+          _that.trackInstalling(registration.installing);
         };
-        console.log('_that.initialiseState(registration);');
-        console.log('this', this);
         _that.initialiseState(registration);
       }).catch(function () {
         console.log('registration failed');
@@ -103,11 +68,29 @@ export function preCacheServiceWorkerService($state, $window, $document) {
         if (refreshing) {
           return;
         }
+        console.log('oncontrollerchange');
         $state.reload();
         refreshing = true;
       };
     },
-    // displaySubBtn: false,
+    trackInstalling(worker: ServiceWorker) {
+      console.log('trackInstalling');
+      var _that = this;
+      worker.onstatechange = function () {
+        console.log('service worker state chnaged', worker.state);
+        if (worker.state === 'installed') {
+          _that.updateReady(worker);
+        }
+      };
+    },
+    updateReady(worker: ServiceWorker) {
+      console.log('updateready');
+      $rootScope.$broadcast('updateready');
+      $rootScope.$on('update_version', function () {
+        worker.postMessage({action: 'skipWaiting'})
+      });
+
+    },
     displaySubBtnFn() {
       var _that = this;
       console.log('btnFn displaySubBtn', displaySubBtn);
@@ -138,7 +121,6 @@ export function preCacheServiceWorkerService($state, $window, $document) {
     initialiseState(reg) {
       console.log('reg', reg);
       var _that = this;
-      console.log('initialiseState(reg: any) {');
       // var _that = this;
       // Are Notifications supported in the service worker?  
       if (!(reg.showNotification)) {
@@ -147,7 +129,7 @@ export function preCacheServiceWorkerService($state, $window, $document) {
       } else {
         useNotifications = true;
       }
-      console.log("if (Notify.permission === 'denied') {");
+      // console.log("if (Notify.permission === 'denied') {");
       // Check the current Notification permission.  
       // If its denied, it's a permanent block until the  
       // user changes the permission  
@@ -155,17 +137,14 @@ export function preCacheServiceWorkerService($state, $window, $document) {
         console.log('The user has blocked notifications.');
         return;
       }
-      console.log("if (!('PushManager' in $window)) {");
       // Check if push messaging is supported  
       if (!('PushManager' in $window)) {
         console.log('Push messaging isn\'t supported.');
         return;
       }
 
-      console.log('navigator.serviceWorker.ready');
       // We need the service worker registration to check for a subscription  
       _that.regReady(reg).then(function (reg) {
-        console.log('reg.pushManager.getSubscription()');
         // Do we already have a push message subscription?  
         reg.pushManager.getSubscription()
           .then(function (subscription: any) {
@@ -187,16 +166,16 @@ export function preCacheServiceWorkerService($state, $window, $document) {
 
             // Set your UI to show they have subscribed for  
             // push messages  
-            // subBtn.textContent = 'Unsubscribe from Push Messaging';
             isPushEnabled = true;
 
             // initialize status, which includes setting UI elements for subscribed status
             // and updating Subscribers list via push
             console.log(subscription.toJSON());
             var endpoint = subscription.endpoint;
-            var key = subscription.getKey('p256dh');
+            // var key = subscription.getKey('p256dh');
             console.log(key);
-            _that.updateStatus(endpoint, key, 'init');
+            var pushSubscription = JSON.stringify(subscription);
+            _that.updateStatus(pushSubscription, 'init');
           })
           .catch(function (err) {
             console.log('Error during getSubscription()', err);
@@ -224,7 +203,7 @@ export function preCacheServiceWorkerService($state, $window, $document) {
       _that.regReady(reg).then(function (reg: any) {
         reg.pushManager.subscribe({ userVisibleOnly: true })
           .then(function (subscription) {
-            console.log('subscription', subscription);
+            var pushSubcription: any = JSON.stringify(subscription);
             // The subscription was successful
             isPushEnabled = true;
             // subBtn.textContent = 'Unsubscribe from Push Messaging';
@@ -233,9 +212,9 @@ export function preCacheServiceWorkerService($state, $window, $document) {
 
             // Update status to subscribe current user on server, and to let
             // other users know this user has subscribed
-            var endpoint = subscription.endpoint;
-            var key = subscription.getKey('p256dh');
-            _that.updateStatus(endpoint, key, 'subscribe');
+            var endpoint = pushSubcription.endpoint;
+            var keys = pushSubcription.keys;
+            _that.updateStatus(pushSubcription, 'subscribe');
           })
           .catch(function (e) {
             if ($window.Notification.permission === 'denied') {
@@ -252,7 +231,6 @@ export function preCacheServiceWorkerService($state, $window, $document) {
               console.log('Unable to subscribe to push.', e);
               // subBtn.prop('disabled', false);
               displaySubBtn = true;
-              subBtn.textContent = 'Subscribe to Push Messaging';
             }
           });
       });
@@ -282,8 +260,9 @@ export function preCacheServiceWorkerService($state, $window, $document) {
             // Update status to unsubscribe current user from server (remove details)
             // and let other subscribers know they have unsubscribed  
             var endpoint = subscription.endpoint;
-            var key = subscription.getKey('p256dh');
-            _that.updateStatus(endpoint, key, 'unsubscribe');
+            // var key = subscription.getKey('p256dh');
+            var pushSubscription = JSON.stringify(subscription);
+            _that.updateStatus(pushSubscription, 'unsubscribe');
 
             // Check we have a subscription to unsubscribe
             if (!subscription) {
@@ -292,7 +271,6 @@ export function preCacheServiceWorkerService($state, $window, $document) {
               isPushEnabled = false;
               // subBtn.prop('disabled', false);
               displaySubBtn = true;
-              subBtn.textContent = 'Subscribe to Push Messaging';
               return;
             }
 
@@ -307,7 +285,6 @@ export function preCacheServiceWorkerService($state, $window, $document) {
               subscription.unsubscribe().then(function (successful) {
                 // subBtn.prop('disabled', false);
                 displaySubBtn = true;
-                subBtn.textContent = 'Subscribe to Push Messaging';
                 isPushEnabled = false;
               }).catch(function (e) {
                 // We failed to unsubscribe, this can lead to
@@ -326,7 +303,9 @@ export function preCacheServiceWorkerService($state, $window, $document) {
           });
       });
     },
-    postSubscribeObj(statusType, name, endpoint, key) {
+    postSubscribeObj(subscription, statusType) {
+      var pushSubscription = JSON.parse(subscription);
+      console.log('pushSubscription.keys', pushSubscription['keys']);
       // Create a new XHR and send an array to the server containing
       // the type of the request, the name of the user subscribing, 
       // and the push subscription endpoint + key the server needs
@@ -345,68 +324,32 @@ export function preCacheServiceWorkerService($state, $window, $document) {
       // }
       // console.log(subscribeObj);
       // request.send(JSON.stringify(subscribeObj));
+
+      var sub = {
+        statusType: statusType,
+        name: 'name',
+        endpoint: pushSubscription.endpoint,
+        p256dh: pushSubscription.keys.p256dh,
+        auth: pushSubscription.keys.auth,
+        subscription: subscription
+      }
+      $http.post('/api/subscriptions', sub)
+        .then(function (response) {
+          console.log('response', response);
+        });
+
     },
 
-    updateStatus(endpoint, key, statusType) {
-      console.log("updateStatus, endpoint: " + endpoint);
-      console.log("updateStatus, key: " + key);
-
+    updateStatus(pushSubscription, statusType) {
+      console.log("updateStatus, pushSubscription: " + pushSubscription);
       // If we are subscribing to push
       if (statusType === 'subscribe' || statusType === 'init') {
-        // // Create the input and button to allow sending messages
-        // sendBtn = document.createElement('button');
-        // sendInput = document.createElement('input');
-
-        // sendBtn.textContent = 'Send Chat Message';
-        // sendInput.setAttribute('type', 'text');
-        // // Append them to the document
-        // controlsBlock.appendChild(sendBtn);
-        // controlsBlock.appendChild(sendInput);
-
-        // // Set up a listener so that when the Send Chat Message button is clicked,
-        // // the sendChatMessage() function is fun, which handles sending the message 
-        // sendBtn.onclick = function () {
-        //   sendChatMessage(sendInput.value);
-        // }
-
-        this.postSubscribeObj(statusType, name, endpoint, key);
+        this.postSubscribeObj(pushSubscription, statusType);
 
       } else if (statusType === 'unsubscribe') {
-        // If we are unsubscribing from push
-
-        // Remove the UI elements we added when we subscribed
-        // controlsBlock.removeChild(sendBtn);
-        // controlsBlock.removeChild(sendInput);
-
-        this.postSubscribeObj(statusType, name, endpoint, key);
-
+        this.postSubscribeObj(pushSubscription, statusType);
       }
-
     },
-
-    handleChannelMessage(data) {
-      console.log('handleChannelMessage');
-      // if (data.action === 'subscribe' || data.action === 'init') {
-      //   var listItem = document.createElement('li');
-      //   listItem.textContent = data.name;
-      //   subscribersList.appendChild(listItem);
-      // } else if (data.action === 'unsubscribe') {
-      //   for (i = 0; i < subscribersList.children.length; i++) {
-      //     if (subscribersList.children[i].textContent === data.name) {
-      //       subscribersList.children[i].parentNode.removeChild(subscribersList.children[i]);
-      //     }
-      //   }
-      //   nameInput.disabled = false;
-      // } else if (data.action === 'chatMsg') {
-      //   var listItem = document.createElement('li');
-      //   listItem.textContent = data.name + ": " + data.msg;
-      //   messagesList.appendChild(listItem);
-      //   sendInput.value = '';
-      // }
-    },
-    // isPushEnabled() {
-    //   return isPushEnabled
-    // },
     onShowNotification() {
       console.log('notification is shown!');
     },
@@ -495,6 +438,6 @@ export function preCacheServiceWorkerService($state, $window, $document) {
   }
 }
 
-export default angular.module('saveButtonAppApp.preCacheServiceWorker', [])
+export default angular.module('saveButtonAppApp.preCacheServiceWorker', ['ui-notification'])
   .service('preCacheServiceWorker', preCacheServiceWorkerService)
   .name;
