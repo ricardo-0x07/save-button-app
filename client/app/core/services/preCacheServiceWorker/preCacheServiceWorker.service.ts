@@ -23,7 +23,7 @@ export function preCacheServiceWorkerService($state, $window, $document, $http, 
         Notify.requestPermission(_that.onPermissionGranted, _that.onPermissionDenied);
       }
 
-      if (isPushEnabled) {
+      if (_that.isPushEnabled) {
         console.log('isPushEnabled');
       }
       // Check if browser supports service worker.
@@ -31,6 +31,7 @@ export function preCacheServiceWorkerService($state, $window, $document, $http, 
         console.log('this browser does NOT support service worker');
         return;
       }
+      console.log('navigator', navigator);
       // Register service worker 
       navigator.serviceWorker.register('my-service-worker.js').then(function (registration: ServiceWorkerRegistration) {
         reg = registration;
@@ -93,7 +94,7 @@ export function preCacheServiceWorkerService($state, $window, $document, $http, 
     },
     displaySubBtnFn() {
       var _that = this;
-      console.log('btnFn displaySubBtn', displaySubBtn);
+      // console.log('btnFn displaySubBtn', displaySubBtn);
       return displaySubBtn;
     },
     regReady(reg) {
@@ -119,7 +120,6 @@ export function preCacheServiceWorkerService($state, $window, $document, $http, 
     },
     // Once the service worker is registered set the initial state  
     initialiseState(reg) {
-      console.log('reg', reg);
       var _that = this;
       // var _that = this;
       // Are Notifications supported in the service worker?  
@@ -155,7 +155,7 @@ export function preCacheServiceWorkerService($state, $window, $document, $http, 
             console.log('displaySubBtn = true;');
             displaySubBtn = true;
             _that.displaySubBtnFn();
-            console.log('displaySubBtn', displaySubBtn);
+            console.log('subscription', subscription);
 
             if (!subscription) {
               console.log('Not yet subscribed to Push')
@@ -166,7 +166,7 @@ export function preCacheServiceWorkerService($state, $window, $document, $http, 
 
             // Set your UI to show they have subscribed for  
             // push messages  
-            isPushEnabled = true;
+            _that.isPushEnabled = true;
 
             // initialize status, which includes setting UI elements for subscribed status
             // and updating Subscribers list via push
@@ -205,7 +205,7 @@ export function preCacheServiceWorkerService($state, $window, $document, $http, 
           .then(function (subscription) {
             var pushSubcription: any = JSON.stringify(subscription);
             // The subscription was successful
-            isPushEnabled = true;
+            _that.isPushEnabled = true;
             // subBtn.textContent = 'Unsubscribe from Push Messaging';
             // subBtn.prop('disabled', false);
             displaySubBtn = true;
@@ -268,13 +268,13 @@ export function preCacheServiceWorkerService($state, $window, $document, $http, 
             if (!subscription) {
               // No subscription object, so set the state
               // to allow the user to subscribe to push
-              isPushEnabled = false;
+              _that.isPushEnabled = false;
               // subBtn.prop('disabled', false);
               displaySubBtn = true;
               return;
             }
 
-            isPushEnabled = false;
+            _that.isPushEnabled = false;
 
             // setTimeout used to stop unsubscribe being called before the message
             // has been sent to everyone to tell them that the unsubscription has
@@ -285,7 +285,7 @@ export function preCacheServiceWorkerService($state, $window, $document, $http, 
               subscription.unsubscribe().then(function (successful) {
                 // subBtn.prop('disabled', false);
                 displaySubBtn = true;
-                isPushEnabled = false;
+                _that.isPushEnabled = false;
               }).catch(function (e) {
                 // We failed to unsubscribe, this can lead to
                 // an unusual state, so may be best to remove
@@ -388,7 +388,7 @@ export function preCacheServiceWorkerService($state, $window, $document, $http, 
     notifyMe() {
       var _that = this;
       console.log('subcription button clicked');
-      if (isPushEnabled) {
+      if (_that.isPushEnabled) {
         _that.unsubscribe();
       } else {
         _that.subscribe();

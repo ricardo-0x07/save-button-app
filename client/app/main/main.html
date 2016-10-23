@@ -17,7 +17,6 @@
 	</div>
 	<div class="row">
 		<div class="col-lg-12">
-			<!--<h1 class="page-header">Opportunities:</h1>-->
 			<opportunity class="col-xs-12 col-sm-6 col-md-4" ng-repeat="opportunity in $ctrl.awesomeOpportunities | filter:$ctrl.query | orderBy:opportunity.name track by opportunity.id"
 				opportunity="opportunity">
 			</opportunity>
@@ -27,30 +26,25 @@
 	<nav class="navbar navbar-default navbar-fixed-bottom" style="min-height: 0;">
 		<div class="" ng-show="collapse">
 			<form class="opportunity-form" class="form-inline">
-				<!--<p class="input-group">-->
 				<div class="row" style="width: 100%; margin: auto; margin: auto; background-color: #fff;" ng-show="$ctrl.File">
 					<div class="col-xs-12">
-						<img data-ng-src="{{'data:' + $ctrl.File.filetype + ';base64,' + $ctrl.File.base64}}" data-err-src="images/spinner.gif" class="img-responsive">
+						<img data-ng-src="{{$ctrl.getImage($ctrl.File)}}" data-err-src="images/spinner.gif" class="img-responsive">
 					</div>
 				</div>
-				<input id="imgInp" type="file" class="form-control" ng-model="$ctrl.File" accept="image/*" minsize="500" required base-sixty-four-input
-					onload="$ctrl.onload()">
+				<input id="imgInp" type="file" class="form-control" ng-model="$ctrl.File" accept="image/*;capture=camera" minsize="500" required base-sixty-four-input
+					>
 				<span ng-show="form.files.$error.maxsize">Files must not exceed 500 KB</span>
-				<!--<a ng-click="files=null" class="help-block btn btn-default">Clear input</a>-->
 				<input type="text" class="form-control" placeholder="Add a new opportunity here." ng-model="$ctrl.newOpportunity.description">
-				<!--<input type="text" class="form-control" placeholder="Kindly enter a brief description." ng-model="$ctrl.newOpportunity.description">-->
 				<span class="input-group-btn">
-        				<button type="submit" class="btn btn-primary" ng-click="$ctrl.addOpportunities()" style="width: 100%;">Add New Opportunity</button>
+        				<button type="submit" class="btn btn-primary" ng-click="$ctrl.addOpportunities(); collapse = !collapse;" style="width: 100%;">Add New Opportunity</button>
       				</span>
-				<!--</p>-->
 			</form>
 		</div>
-		<!--<span class="input-group-btn">-->
 		<button type="submit" class="btn btn-primary" ng-click="collapse = !collapse" style="width: 100%;">{{collapse ? 'Hide' : 'Show'}}</button>
 		<div ng-show="$ctrl.preCacheServiceWorker.displaySubBtnFn()">
-			<button id="subscribe" ng-click="$ctrl.preCacheServiceWorker.notifyMe()">{{$ctrl.preCacheServiceWorker.isPushEnabled ? 'Unsubscribe from Push Messaging' : 'Subscribe to Push notifications'}}</button>
+			<button id="subscribe" ng-click="$ctrl.preCacheServiceWorker.notifyMe()">{{$ctrl.preCacheServiceWorker.isPushEnabled ? 'Unsubscribe from Push Notifications' : 'Subscribe to Push Notifications'}}</button>
 		</div>
-		<div ng-show="{{$ctrl.showToast}}">
+		<div data-ng-show="$ctrl.showToastr()" class="navbar-inverse container-fluid">
 			<toast></toast>
 		</div>
 	</nav>

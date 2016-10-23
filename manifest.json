@@ -2,7 +2,7 @@
   "name": "Save Button App",  
   "short_name": "Save Button",  
   "icons": [{  
-        "src": "push-icon.png",  
+        "src": "/assets/images/icon.png",  
         "sizes": "111x111",
         "type": "image/png" 
       }],  

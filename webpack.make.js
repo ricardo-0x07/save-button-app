@@ -22,6 +22,7 @@ import opportunitiesIndexedDbService from './client/app/core/services/opportunit
 var SW_PRECACHE_CONFIG = {
     cacheId: require('./package.json').name,
     // replacePrefix: '/',
+    skipWaiting: false,
     filename: SERVICE_WORKER_FILENAME,
     importScripts: [
         "/lib/idb/lib/idb.js",
@@ -43,7 +44,7 @@ var SW_PRECACHE_CONFIG = {
     stripPrefix: staticRootDir + '/',
     runtimeCaching: [
         {
-            handler: 'cacheFirst',
+            handler: 'networkFirst',
             urlPattern: /[.]js$/,
         }, {
             handler: opportunitiesIndexedDbService.myIdbHandler,
@@ -97,7 +98,9 @@ module.exports = function makeWebpackConfig(options) {
                 'idb',
                 'jquery',
                 'notifyjs',
-                'angular-ui-notification'
+                'angular-ui-notification',
+                'simple-transition',
+                // 'compass-mixins'
             ]
         };
     }
