@@ -32,7 +32,7 @@ import opportunity from './core/opportunity/opportunity.component';
 import toast from './core/toast/toast.component';
 import opportunityService from './core/services/opportunity/opportunity.service';
 import swPrecacheReg from './core/services/preCacheServiceWorker/preCacheServiceWorker.service';
-// import opportunitiesIndexedDbService from './core/services/opportunitiesIndexedDb/indexedDb';
+import photoCaptureService from './core/services/photoCapture/photoCapture.service';
 
 import './app.scss';
 angular.module('saveButtonAppApp', [
@@ -43,7 +43,7 @@ angular.module('saveButtonAppApp', [
   infiniteScroll,
 
   'btford.socket-io',
-
+  photoCaptureService,
   uiRouter,
   uiBootstrap,
   uiNotification,

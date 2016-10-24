@@ -99,7 +99,7 @@ module.exports = function makeWebpackConfig(options) {
                 'jquery',
                 'notifyjs',
                 'angular-ui-notification',
-                'simple-transition',
+                // 'simple-transition',
                 // 'compass-mixins'
             ]
         };

@@ -22,25 +22,41 @@
 			</opportunity>
 		</div>
 	</div>
-
 	<nav class="navbar navbar-default navbar-fixed-bottom" style="min-height: 0;">
-		<div class="" ng-show="collapse">
-			<form class="opportunity-form" class="form-inline">
-				<div class="row" style="width: 100%; margin: auto; margin: auto; background-color: #fff;" ng-show="$ctrl.File">
+		<div ng-show="collapse">
+			<form class="opportunity-form">
+				<div class="row" style="width: 100%; margin: auto; margin: auto; background-color: #fff;" >
 					<div class="col-xs-12">
-						<img data-ng-src="{{$ctrl.getImage($ctrl.File)}}" data-err-src="images/spinner.gif" class="img-responsive">
+						<video autoplay ng-click="$ctrl.photoCapture.takePhoto(); $ctrl.updateFile()"></video>
+						<img id='photo-op' data-ng-src="{{$ctrl.getImage($ctrl.File)}}" data-err-src="images/spinner.gif" class="img-responsive">
+						<canvas style="display:none;"></canvas>
 					</div>
 				</div>
-				<input id="imgInp" type="file" class="form-control" ng-model="$ctrl.File" accept="image/*;capture=camera" minsize="500" required base-sixty-four-input
-					>
-				<span ng-show="form.files.$error.maxsize">Files must not exceed 500 KB</span>
-				<input type="text" class="form-control" placeholder="Add a new opportunity here." ng-model="$ctrl.newOpportunity.description">
-				<span class="input-group-btn">
-        				<button type="submit" class="btn btn-primary" ng-click="$ctrl.addOpportunities(); collapse = !collapse;" style="width: 100%;">Add New Opportunity</button>
-      				</span>
+				<div class="row" style="background-color: #fff;" >
+					<div class="col-xs-6">
+						<input class="inputfile" id="file" id="imgInp" type="file" name="file" class="form-control" ng-model="$ctrl.File" accept="image/*" minsize="500" required base-sixty-four-input>
+						<label for="file">
+							<span class="glyphicon glyphicon-upload" aria-hidden="true"></span>
+						</label>
+						<span ng-show="form.files.$error.maxsize">Files must not exceed 500 KB</span>
+					</div>
+					<div class="col-xs-6">
+						<button type="button" class="btn btn-default">
+							<span class="glyphicon glyphicon-camera" aria-hidden="true"></span>
+					    </button>
+					</div>
+				</div>
+				<div class="row" style="background-color: #fff;" >
+					<div class="col-xs-12">
+						<input type="text" class="form-control" placeholder="Add a new opportunity here." ng-model="$ctrl.newOpportunity.description">
+						<span class="input-group-btn">
+							<button type="submit" class="btn btn-primary" ng-click="$ctrl.addOpportunities(); collapse = !collapse;" style="width: 100%;">Add New Opportunity</button>
+						</span>
+					</div>
+				</div>
 			</form>
 		</div>
-		<button type="submit" class="btn btn-primary" ng-click="collapse = !collapse" style="width: 100%;">{{collapse ? 'Hide' : 'Show'}}</button>
+		<button type="submit" class="btn btn-primary" ng-click="collapse = !collapse; $ctrl.photoCapture.initPHotoCapture();" style="width: 100%;">{{collapse ? 'Hide' : 'Show'}}</button>
 		<div ng-show="$ctrl.preCacheServiceWorker.displaySubBtnFn()">
 			<button id="subscribe" ng-click="$ctrl.preCacheServiceWorker.notifyMe()">{{$ctrl.preCacheServiceWorker.isPushEnabled ? 'Unsubscribe from Push Notifications' : 'Subscribe to Push Notifications'}}</button>
 		</div>
