@@ -36,6 +36,7 @@ export function photoCaptureService() {
         console.log(" JSON.stringify canvas.toDataURL('image/webp')", JSON.stringify(canvas.toDataURL('image/webp')));
        img.src = canvas.toDataURL('image/webp');
       }
+      return Promise.resolve();
     },
     initPHotoCapture() {
       console.log('initPHotoCapture');

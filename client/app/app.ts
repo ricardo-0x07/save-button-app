@@ -28,6 +28,7 @@ import util from '../components/util/util.module';
 import socket from '../components/socket/socket.service';
 // import home from './components/home/home.component';
 import opportunities from './components/opportunities/opportunities.component';
+import newOpportunity from './components/newOpportunity/newOpportunity.component';
 import opportunity from './core/opportunity/opportunity.component';
 import toast from './core/toast/toast.component';
 import opportunityService from './core/services/opportunity/opportunity.service';
@@ -43,6 +44,7 @@ angular.module('saveButtonAppApp', [
   infiniteScroll,
 
   'btford.socket-io',
+  newOpportunity,
   photoCaptureService,
   uiRouter,
   uiBootstrap,
