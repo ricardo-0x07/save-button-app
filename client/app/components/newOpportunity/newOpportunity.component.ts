@@ -8,32 +8,16 @@ import routes from './newOpportunity.routes';
 export class NewOpportunityComponent {
   newOpportunity = '';
   image = {};
-  public File = {};
-  public canvas;
   public img;
+  public File;
 
   /*@ngInject*/
-  constructor(private $http, public  preCacheServiceWorker, public photoCapture) {
-    this.canvas = document.querySelector('canvas');
+  constructor($scope, private $http, public $stateParams) {
     this.img = document.querySelector('img#photo-op')
-    console.log('$ctrl.File', this.File);
-    this.photoCapture.initPHotoCapture();
-  }
-  takePhoto() {
-    this.photoCapture.takePhoto()
-      .then(() => {
-        console.log("canvas.toDataURL('image/webp')", this.canvas.toDataURL('image/webp'));
-        console.log('update $ctrl.File', this.File);
-        var data = this.canvas.toDataURL('image/webp');
-        var replace = 'data:image/webp;base64,';
-        var base64 = data.replace(replace, '');
-        console.log('base64', base64);
-        this.File.filename = 'photo';
-        this.File.filetype = 'image/webp';
-        this.File.filesize = 'photo';
-        this.File.base64 = base64;
-        console.log('this.File', this.File);
-      });
+    console.log('this', this);
+    console.log('$scope', $scope);
+    console.log('$stateParams.File', $stateParams.File);
+    this.File = this.$stateParams.File;
   }
   addOpportunities() {
     var _that = this;
@@ -49,13 +33,13 @@ export class NewOpportunityComponent {
         .then(function (response) {
           console.log('response', response);
           _that.File = {};
-          // _that.i
         });
       this.newOpportunity = '';
     }
   }
   getImage(data) {
-    // console.log('data', data);
+    console.log('data', data);
+    console.log('$ctrl.File', this.File);
     if (data && data.base64 && data.filetype) {
       var filetype = data.filetype ? data.filetype : ''
       var base64 = data.base64 ? data.base64 : ''
@@ -63,14 +47,12 @@ export class NewOpportunityComponent {
     }
     return '';
   }
-
 }
 
 export default angular.module('saveButtonAppApp.newOpportunity', [uiRouter])
   .config(routes)
   .component('newOpportunity', {
     template: require('./newOpportunity.html'),
-    controller: NewOpportunityComponent,
-    controllerAs: 'newOpportunityCtrl'
+    controller: NewOpportunityComponent
   })
   .name;

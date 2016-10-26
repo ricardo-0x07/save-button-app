@@ -1,8 +1,13 @@
-<div data-ng-show="$ctrl.showToastr()" class="navbar-inverse container-fluid">
-	<toast></toast>
-</div>
-<div class="container">
-	<p>Save-Button v1.0.0 |
-		<a href="https://twitter.com/ricardo_0x07">@ricardo_0x07</a> |
-	</p>
-</div>
+<nav class="navbar navbar-default navbar-fixed-bottom" style="min-height: 0;">
+	<div data-ng-show="$ctrl.showToastr()" class="navbar-inverse container-fluid">
+		<toast></toast>
+	</div>
+	<div class="container">
+		<p>
+			<a ui-sref="newOpportunity">
+				<button class="btn btn-default glyphicon glyphicon-tag">Opportunity</button>
+			</a>
+			<a style="float: right;" id="subscribe" ng-click="$ctrl.preCacheServiceWorker.notifyMe()"><button class="btn btn-default glyphicon glyphicon-transfer">{{$ctrl.preCacheServiceWorker.isPushEnabled ? 'Unsubscribe' : 'Subscribe'}}</button></a>
+		</p>
+	</div>
+</nav>

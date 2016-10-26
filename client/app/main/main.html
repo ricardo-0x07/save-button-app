@@ -1,11 +1,3 @@
-<header class="hero-unit hidden-xs" id="banner">
-	<div class="container">
-		<h1>Save Button!</h1>
-		<p class="lead">Hunt for Your Next Bargain</p>
-		<img src="assets/images/save-button.png" alt="I'm Yeoman">
-	</div>
-</header>
-
 <div class="container" style="padding-top: 55px;">
 	<div class='row'>
 		<div class='col-xs-12'>
@@ -23,60 +15,5 @@
 		</div>
 	</div>
 	<nav class="navbar navbar-default navbar-fixed-bottom" style="min-height: 0;">
-		<!--<div ng-show="collapse">
-			<form class="opportunity-form">
-				<div class="row" style="width: 100%; margin: auto; margin: auto; background-color: #fff;" ng-hide="($ctrl.File.base64)">
-					<div class="col-xs-12">
-						<video autoplay></video>
-					</div>
-				</div>
-				<div class="row" style="width: 100%; margin: auto; margin: auto; background-color: #fff;" ng-show="($ctrl.File.base64)">
-					<div class="col-xs-12">
-						<img id='photo-op' data-ng-src="{{$ctrl.getImage($ctrl.File)}}" data-err-src="images/spinner.gif" class="img-responsive">
-						<canvas style="display:none;"></canvas>
-					</div>
-				</div>
-				<div class="row" style="background-color: #fff;">
-					<div class="col-xs-12">
-						<div class="row">
-							<div class="col-xs-12">
-								<input type="text" class="form-control" placeholder="Add a new opportunity here." ng-model="$ctrl.newOpportunity.description">
-							</div>
-						</div>
-						<div class="row">
-							<div class="col-xs-12">
-								<input class="inputfile" id="file" id="imgInp" type="file" name="file" class="form-control" ng-model="$ctrl.File" accept="image/*"
-									minsize="500" required base-sixty-four-input>
-								<label for="file" style="width: 100%">
-									<span class="glyphicon glyphicon-upload" aria-hidden="true"> Upload Photo</span>
-								</label>
-								<span ng-show="form.files.$error.maxsize">Files must not exceed 500 KB</span>
-							</div>
-						</div>
-						<div class="row">
-							<div class="col-xs-12">
-								<button ng-click="$ctrl.takePhoto()" type="button" class="btn btn-default" style="font-size: 1.0em; font-weight: 700; width: 100%; text-align: left;">
-									<span class="glyphicon glyphicon-camera" aria-hidden="true"> Take Photo</span>
-					    		</button>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="row" style="background-color: #fff;">
-					<div class="col-xs-12">
-						<span class="input-group-btn">
-							<button type="submit" class="btn btn-primary" ng-click="$ctrl.addOpportunities(); collapse = !collapse;" style="width: 100%;">Add New</button>
-						</span>
-					</div>
-				</div>
-			</form>
-		</div>
-		<button type="submit" class="btn btn-primary" ng-click="collapse = !collapse; $ctrl.photoCapture.initPHotoCapture();" style="width: 100%;">{{collapse ? 'Hide' : 'Show'}}</button>-->
-		<div ng-show="$ctrl.preCacheServiceWorker.displaySubBtnFn()">
-			<button id="subscribe" ng-click="$ctrl.preCacheServiceWorker.notifyMe()">{{$ctrl.preCacheServiceWorker.isPushEnabled ? 'Unsubscribe from Push Notifications' : 'Subscribe to Push Notifications'}}</button>
-		</div>
-		<!--<div data-ng-show="$ctrl.showToastr()" class="navbar-inverse container-fluid">
-			<toast></toast>
-		</div>-->
 	</nav>
 </div>

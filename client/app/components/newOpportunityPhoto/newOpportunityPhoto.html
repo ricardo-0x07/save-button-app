@@ -1,1 +1,18 @@
-<div>This is the newOpportunityPhoto view.</div>
+<div class="container" style="min-height: 0; padding-top: 51px;">
+	<div class="row">
+		<div class "col-xs-12">
+			<ul class="nav nav-tabs navbar-inverse" style="border-radius: 4px;">
+				<li>
+					<a ui-sref="newOpportunityCamera" ui-sref-active="active">Camera</a>
+				</li>
+				<li style="float: right">
+					<a ui-sref="newOpportunity({File: $ctrl.File})" ui-sref-active="active">Use</a>
+				</li>
+			</ul>
+		</div>
+	</div>
+	<figure id="imageContainer">
+		<img style="width: 100%;" id='photo-op' data-ng-src="{{$ctrl.getImage($ctrl.File)}}" data-err-src="images/spinner.gif" class="img-responsive"
+			alt="new opportunity photo">
+	</figure>
+</div>

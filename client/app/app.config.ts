@@ -4,7 +4,7 @@ export function routeConfig($urlRouterProvider, $locationProvider) {
   'ngInject';
 
   $urlRouterProvider
-    .otherwise('/opportunities');
+    .otherwise('/');
 
   $locationProvider.html5Mode(true);
 }

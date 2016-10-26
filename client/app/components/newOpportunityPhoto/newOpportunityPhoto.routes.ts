@@ -5,6 +5,9 @@ export default function($stateProvider) {
   $stateProvider
     .state('newOpportunityPhoto', {
       url: '/new/opportunity/photo',
-      template: '<new-opportunity-photo></new-opportunity-photo>'
+      template: '<new-opportunity-photo></new-opportunity-photo>',
+      params: {
+        File: {}
+      }
     });
 }
