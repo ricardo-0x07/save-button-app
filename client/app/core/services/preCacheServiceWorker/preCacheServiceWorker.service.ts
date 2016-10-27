@@ -173,7 +173,6 @@ export function preCacheServiceWorkerService($state, $window, $document, $http, 
             console.log(subscription.toJSON());
             var endpoint = subscription.endpoint;
             // var key = subscription.getKey('p256dh');
-            console.log(key);
             var pushSubscription = JSON.stringify(subscription);
             _that.updateStatus(pushSubscription, 'init');
           })
@@ -365,7 +364,7 @@ export function preCacheServiceWorkerService($state, $window, $document, $http, 
     },
     onPermissionGranted() {
       console.log('Permission has been granted by the user');
-      _that.doNotification();
+      this.doNotification();
     },
     onPermissionDenied() {
       console.warn('Permission has been denied by the user');
