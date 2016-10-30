@@ -1,6 +1,5 @@
 // 'use strict';
 const angular = require('angular');
-// import ngAnimate from 'angular-animate';
 const ngCookies = require('angular-cookies');
 const ngResource = require('angular-resource');
 const ngSanitize = require('angular-sanitize');
@@ -10,13 +9,8 @@ import 'angular-socket-io';
 const uiRouter = require('angular-ui-router');
 const uiBootstrap = require('angular-ui-bootstrap');
 const uiNotification = require('angular-ui-notification');
-// const simpleTransition = require('simple-transition');
-// const compassMixins = require('compass-mixins');
-// const ngMessages = require('angular-messages');
-// import ngValidationMatch from 'angular-validation-match';
 
 import {routeConfig} from './app.config';
-
 import _Auth from '../components/auth/auth.module';
 import account from './account';
 import admin from './admin';
@@ -26,7 +20,6 @@ import main from './main/main.component';
 import constants from './app.constants';
 import util from '../components/util/util.module';
 import socket from '../components/socket/socket.service';
-// import home from './components/home/home.component';
 import opportunities from './components/opportunities/opportunities.component';
 import newOpportunity from './components/newOpportunity/newOpportunity.component';
 import newOpportunityCamera from './components/newOpportunityCamera/newOpportunityCamera.component';
@@ -42,9 +35,7 @@ angular.module('saveButtonAppApp', [
   ngCookies,
   ngResource,
   ngSanitize,
-  // ngCordova,
   infiniteScroll,
-
   'btford.socket-io',
   newOpportunity,
   newOpportunityCamera,
@@ -61,18 +52,15 @@ angular.module('saveButtonAppApp', [
   constants,
   socket,
   util,
-  // home,
   opportunity,
   toast,
   opportunities,
   swPrecacheReg,
-  // opportunitiesIndexedDbService,
   opportunityService
 ])
   .config(routeConfig)
   .run(function($rootScope, $location, Auth, preCacheServiceWorker) {
     preCacheServiceWorker._registerServiceWorker();
-    console.log('preCacheServiceWorker', preCacheServiceWorker);
     'ngInject';
     // Redirect to login if route requires auth and you're not logged in
     $rootScope.$on('$stateChangeStart', function(event, next) {

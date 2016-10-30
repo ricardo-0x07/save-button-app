@@ -121,7 +121,6 @@ export function preCacheServiceWorkerService($state, $window, $document, $http, 
     // Once the service worker is registered set the initial state  
     initialiseState(reg) {
       var _that = this;
-      // var _that = this;
       // Are Notifications supported in the service worker?  
       if (!(reg.showNotification)) {
         console.log('Notifications aren\'t supported on service workers.');
@@ -196,7 +195,6 @@ export function preCacheServiceWorkerService($state, $window, $document, $http, 
       // Disable the button so it can't be changed while
       // we process the permission request
 
-      // subBtn.prop('disabled', true);
       displaySubBtn = false;
 
       _that.regReady(reg).then(function (reg: any) {
@@ -205,8 +203,6 @@ export function preCacheServiceWorkerService($state, $window, $document, $http, 
             var pushSubcription: any = JSON.stringify(subscription);
             // The subscription was successful
             _that.isPushEnabled = true;
-            // subBtn.textContent = 'Unsubscribe from Push Messaging';
-            // subBtn.prop('disabled', false);
             displaySubBtn = true;
 
             // Update status to subscribe current user on server, and to let
@@ -233,8 +229,6 @@ export function preCacheServiceWorkerService($state, $window, $document, $http, 
             }
           });
       });
-      //   }
-      // });  
     },
     sendSubscriptionToServer(subscription) {
       // TODO: Send the subscription.endpoint
@@ -247,7 +241,6 @@ export function preCacheServiceWorkerService($state, $window, $document, $http, 
     },
     unsubscribe() {
       var _that = this;
-      // subBtn.disabled = true;
       displaySubBtn = false;
 
       _that.regReady(reg).then(function (reg) {
@@ -259,7 +252,6 @@ export function preCacheServiceWorkerService($state, $window, $document, $http, 
             // Update status to unsubscribe current user from server (remove details)
             // and let other subscribers know they have unsubscribed  
             var endpoint = subscription.endpoint;
-            // var key = subscription.getKey('p256dh');
             var pushSubscription = JSON.stringify(subscription);
             _that.updateStatus(pushSubscription, 'unsubscribe');
 
@@ -268,7 +260,6 @@ export function preCacheServiceWorkerService($state, $window, $document, $http, 
               // No subscription object, so set the state
               // to allow the user to subscribe to push
               _that.isPushEnabled = false;
-              // subBtn.prop('disabled', false);
               displaySubBtn = true;
               return;
             }
@@ -282,7 +273,6 @@ export function preCacheServiceWorkerService($state, $window, $document, $http, 
             setTimeout(function () {
               // We have a subcription, so call unsubscribe on it
               subscription.unsubscribe().then(function (successful) {
-                // subBtn.prop('disabled', false);
                 displaySubBtn = true;
                 _that.isPushEnabled = false;
               }).catch(function (e) {
@@ -292,7 +282,6 @@ export function preCacheServiceWorkerService($state, $window, $document, $http, 
                 // inform the user that you disabled push
 
                 console.log('Unsubscription error: ', e);
-                // subBtn.prop('disabled', false);
                 displaySubBtn = true;
               })
             }, 3000);
@@ -392,47 +381,6 @@ export function preCacheServiceWorkerService($state, $window, $document, $http, 
       } else {
         _that.subscribe();
       }
-
-      // var myNotification;
-      // function onShowNotification() {
-      //   console.log('notification is shown!');
-      // }
-      // function onCloseNotification() {
-      //   console.log('notification is closed!');
-      //   myNotification.show();
-      // }
-      // function onClickNotification() {
-      //   console.log('notification was clicked!');
-      // }
-      // function onErrorNotification() {
-      //   console.error('Error showing notification. You may need to request permission.');
-      // }
-      // function onPermissionGranted() {
-      //   console.log('Permission has been granted by the user');
-      //   doNotification();
-      // }
-      // function onPermissionDenied() {
-      //   console.warn('Permission has been denied by the user');
-      // }
-      // // var Notify = window.Notify.default;
-      // function doNotification() {
-      //   myNotification = new Notify('Yo dawg!', {
-      //     body: 'This is an awesome notification',
-      //     tag: 'My unique id',
-      //     notifyShow: onShowNotification,
-      //     notifyClose: onCloseNotification,
-      //     notifyClick: onClickNotification,
-      //     notifyError: onErrorNotification,
-      //     renotify: true,
-      //     timeout: 4
-      //   });
-      //   myNotification.show();
-      // }
-      // if (!Notify.needsPermission) {
-      //   _that.doNotification();
-      // } else if (Notify.isSupported()) {
-      //   Notify.requestPermission(_that.onPermissionGranted, _that.onPermissionDenied);
-      // }
     }
   }
 }

@@ -17,7 +17,7 @@ var webPush = require('web-push');
 webPush.setGCMAPIKey('AIzaSyCiHGnS84m-QlGEJXDvGS0zoMUBCw7cn7c');
 
 // Send Push Notification to Opportunity Notification Subscribers
-function sendPushNotification() {
+function sendPushNotification(opportunity) {
   sqldb.Subscription.findAll()
     .then(function (response) {
       console.log('subcriptions', response);
@@ -38,9 +38,10 @@ function sendPushNotification() {
         console.log('pushSubscription', pushSubscription);
         console.log('subcriber.endpoint', subscriber.endpoint);
         webPush.sendNotification(pushSubscription, JSON.stringify({
-          action: 'chatMsg',
+          action: 'opportunityNotification',
           name: 'Opportunity',
-          msg: 'New opportunity logged'
+          msg: opportunity.description,
+          opportunityId: opportunity.id
         }))
         .then(function(response) {
           console.log('push notification response', response);
@@ -56,7 +57,9 @@ function respondWithResult(res, statusCode) {
   return function (entity) {
 
     if (entity) {
-      return res.status(statusCode).json(entity);
+      // return res.status(statusCode).json(entity);
+      res.status(statusCode).json(entity);
+      return entity;
     }
     return null;
   };

@@ -18,8 +18,6 @@ export function photoCaptureService() {
   console.log('navigator.mediaDevices', navigator.mediaDevices);
   console.log('navigator', navigator);
 
-  // navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
-  // video.addEventListener('click', takePhoto, false);
   return {
     // AngularJS will instantiate a singleton by calling "new" on this function
     takePhoto() {
@@ -57,21 +55,17 @@ export function photoCaptureService() {
         .then(function(stream) {
 
           if (navigator.mediaDevices) {
-            // video.srcObject = stream;
-          // } else {
-            // var vendorURL = window.URL || window.webkitURL;
+            video.srcObject = stream;
+          } else {
             video.src =  window.URL.createObjectURL(stream);
           }
-          // video.srcObject = stream;
           video.onloadedmetadata = function(e) {
             console.log('onloadedmetadata');
             video.play();
           };
-            // video.src = window.URL.createObjectURL(stream);
           localMediaStream = stream;
 
           console.log("video", video);
-          // video.addEventListener('canplay', function(ev){
             console.log('canplay');
             if (!streaming) {
                console.log("video", video);
