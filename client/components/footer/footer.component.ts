@@ -2,7 +2,7 @@ const angular = require('angular');
 
 export class FooterComponent {
   showToast;
-  constructor(public $timeout, public $rootScope, public preCacheServiceWorker) {
+  constructor(public $timeout, public $rootScope, public preCacheServiceWorker, private $state) {
     var _that = this;
     this.showToast = false;
     this.$rootScope.$on('updateready', function () {
@@ -17,6 +17,9 @@ export class FooterComponent {
   }
   showToastr() {
     return this.showToast;
+  }
+  newOpportunity() {
+    this.$state.go('newOpportunity');
   }
 }
 

@@ -4,8 +4,8 @@
 	</div>
 	<div class="container">
 		<p>
-			<a ui-sref="newOpportunity">
-				<button class="btn btn-default glyphicon glyphicon-tag">Opportunity</button>
+			<a >
+				<button class="btn btn-default glyphicon glyphicon-tag" ng-click="$ctrl.newOpportunity()">Opportunity</button>
 			</a>
 			<a style="float: right;" id="subscribe" ng-click="$ctrl.preCacheServiceWorker.notifyMe()"><button class="btn btn-default glyphicon glyphicon-transfer">{{$ctrl.preCacheServiceWorker.isPushEnabled ? 'Unsubscribe' : 'Subscribe'}}</button></a>
 		</p>

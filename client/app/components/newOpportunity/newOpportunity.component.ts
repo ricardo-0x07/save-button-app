@@ -12,7 +12,7 @@ export class NewOpportunityComponent {
   public File;
 
   /*@ngInject*/
-  constructor($scope, private $http, public $stateParams) {
+  constructor($scope, private $http, public $stateParams, private $state) {
     this.img = document.querySelector('img#photo-op')
     console.log('this', this);
     console.log('$scope', $scope);
@@ -46,6 +46,9 @@ export class NewOpportunityComponent {
       return 'data:' + filetype + ';base64,' + base64;
     }
     return '';
+  }
+  newOpportunityCamera() {
+    this.$state.go('newOpportunityCamera');
   }
 }
 
