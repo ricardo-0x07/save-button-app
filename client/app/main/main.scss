@@ -79,3 +79,27 @@
 	outline: 1px dotted #000;
 	outline: -webkit-focus-ring-color auto 5px;
 }
+
+.link {
+    background-color: transparent;
+    border-width: 0px;
+    border-style: none;
+    border-color: transparent;
+    border-image: none;
+}
+
+.navbar-nav>li>.link {
+    padding-top: 15px;
+    padding-bottom: 15px;
+}
+
+.link {
+    // color: #337ab7;
+    color: #9d9d9d;
+    text-decoration: none;
+}
+.link:hover, .link:focus {
+    // color: #23527c;
+    color: #f6f6fb;
+    text-decoration: none;
+}
