@@ -12,8 +12,6 @@ export class NewOpportunityPhotoComponent {
     this.File = this.$stateParams.File;
   }
   getImage(data) {
-    console.log('data', data);
-    console.log('$ctrl.File', this.File);
     if (data && data.base64 && data.filetype) {
       var filetype = data.filetype ? data.filetype : ''
       var base64 = data.base64 ? data.base64 : ''
@@ -32,6 +30,5 @@ export default angular.module('saveButtonAppApp.newOpportunityPhoto', [uiRouter]
   .component('newOpportunityPhoto', {
     template: require('./newOpportunityPhoto.html'),
     controller: NewOpportunityPhotoComponent,
-    // controllerAs: 'newOpportunityPhotoCtrl'
   })
   .name;

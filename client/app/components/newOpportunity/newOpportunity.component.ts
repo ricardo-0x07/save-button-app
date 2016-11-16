@@ -14,14 +14,11 @@ export class NewOpportunityComponent {
   /*@ngInject*/
   constructor($scope, private $http, public $stateParams, private $state) {
     this.img = document.querySelector('img#photo-op')
-    console.log('this', this);
     console.log('$scope', $scope);
-    console.log('$stateParams.File', $stateParams.File);
     this.File = this.$stateParams.File;
   }
   addOpportunities() {
     var _that = this;
-    console.log('this.newOpportunity', this.newOpportunity);
     if (this.newOpportunity) {
       var newFile: any = {};
       newFile.name = this.File.filename;
@@ -31,15 +28,13 @@ export class NewOpportunityComponent {
       this.newOpportunity.File = newFile;
       this.$http.post('/api/opportunities', this.newOpportunity)
         .then(function (response) {
-          console.log('response', response);
           _that.File = {};
         });
       this.newOpportunity = '';
+      this.$state.go('main');
     }
   }
   getImage(data) {
-    console.log('data', data);
-    console.log('$ctrl.File', this.File);
     if (data && data.base64 && data.filetype) {
       var filetype = data.filetype ? data.filetype : ''
       var base64 = data.base64 ? data.base64 : ''

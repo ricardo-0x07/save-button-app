@@ -20,12 +20,9 @@ webPush.setGCMAPIKey('AIzaSyCiHGnS84m-QlGEJXDvGS0zoMUBCw7cn7c');
 function sendPushNotification(opportunity) {
   sqldb.Subscription.findAll()
     .then(function (response) {
-      console.log('subcriptions', response);
       var i;
       for (i = 0; i < (response.length); i++) {
-        console.log('response[i]', response[i]);
         var subscriber = response[i].dataValues;
-        console.log('subscriber.subscription', JSON.parse(subscriber.subscription));
         var pushSubscription = JSON.parse(subscriber.subscription);
         // var pushSubscription = {
         //   endpoint: subscriber.endpoint,
@@ -34,9 +31,6 @@ function sendPushNotification(opportunity) {
         //     auth: subscriber.auth
         //   }
         // };
-        console.log('subcriber', subscriber);
-        console.log('pushSubscription', pushSubscription);
-        console.log('subcriber.endpoint', subscriber.endpoint);
         webPush.sendNotification(pushSubscription, JSON.stringify({
           action: 'opportunityNotification',
           name: 'Opportunity',

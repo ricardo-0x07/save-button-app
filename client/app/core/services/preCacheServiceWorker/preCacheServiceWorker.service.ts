@@ -18,7 +18,6 @@ export function preCacheServiceWorkerService($state, $window, $document, $http, 
       var _that = this;
       // Request permission to send user nitification if needed
       if (!Notify.needsPermission) {
-        this.doNotification();
       } else if (Notify.isSupported()) {
         Notify.requestPermission(_that.onPermissionGranted, _that.onPermissionDenied);
       }
@@ -94,19 +93,16 @@ export function preCacheServiceWorkerService($state, $window, $document, $http, 
     },
     displaySubBtnFn() {
       var _that = this;
-      // console.log('btnFn displaySubBtn', displaySubBtn);
       return displaySubBtn;
     },
     regReady(reg) {
       return new Promise((resolve, reject) => {
         if (reg.active) {
-          // resolve();
           return resolve(reg);
         }
 
         if (!reg.installing && !reg.waiting) {
           return reject(Error('Install failed'));
-          // return;
         }
 
         (reg.installing || reg.waiting).addEventListener('statechange', function () {
@@ -150,11 +146,8 @@ export function preCacheServiceWorkerService($state, $window, $document, $http, 
             // Enable any UI which subscribes / unsubscribes from  
             // push messages.  
 
-            // subBtn.prop('disabled', false);
-            console.log('displaySubBtn = true;');
             displaySubBtn = true;
             _that.displaySubBtnFn();
-            console.log('subscription', subscription);
 
             if (!subscription) {
               console.log('Not yet subscribed to Push')
@@ -169,7 +162,6 @@ export function preCacheServiceWorkerService($state, $window, $document, $http, 
 
             // initialize status, which includes setting UI elements for subscribed status
             // and updating Subscribers list via push
-            console.log(subscription.toJSON());
             var endpoint = subscription.endpoint;
             // var key = subscription.getKey('p256dh');
             var pushSubscription = JSON.stringify(subscription);
@@ -299,19 +291,6 @@ export function preCacheServiceWorkerService($state, $window, $document, $http, 
       // and the push subscription endpoint + key the server needs
       // to send push messages
       console.log('send subcription request to server');
-      // var request = new XMLHttpRequest();
-
-      // request.open('POST', 'https://127.0.0.1:7000');
-      // request.setRequestHeader('Content-Type', 'application/json');
-
-      // var subscribeObj = {
-      //   statusType: statusType,
-      //   name: nameInput.value,
-      //   endpoint: endpoint,
-      //   key: btoa(String.fromCharCode.apply(null, new Uint8Array(key)))
-      // }
-      // console.log(subscribeObj);
-      // request.send(JSON.stringify(subscribeObj));
 
       var sub = {
         statusType: statusType,
@@ -323,7 +302,6 @@ export function preCacheServiceWorkerService($state, $window, $document, $http, 
       }
       $http.post('/api/subscriptions', sub)
         .then(function (response) {
-          console.log('response', response);
         });
 
     },
@@ -353,23 +331,9 @@ export function preCacheServiceWorkerService($state, $window, $document, $http, 
     },
     onPermissionGranted() {
       console.log('Permission has been granted by the user');
-      this.doNotification();
     },
     onPermissionDenied() {
       console.warn('Permission has been denied by the user');
-    },
-    doNotification() {
-      myNotification = new Notify('Yo dawg!', {
-        body: 'This is an awesome notification',
-        tag: 'My unique id',
-        notifyShow: _that.onShowNotification,
-        notifyClose: _that.onCloseNotification,
-        notifyClick: _that.onClickNotification,
-        notifyError: _that.onErrorNotification,
-        renotify: true,
-        timeout: 4
-      });
-      myNotification.show();
     },
     isPushEnabled: false,
 

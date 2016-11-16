@@ -7,12 +7,10 @@
 import errors from './components/errors';
 import path from 'path';
 
-export default function (app) {
+export default function(app) {
   // Insert routes below
   app.use('/api/subscriptions', require('./api/subscription'));
-  console.log('before index');
   app.use('/api/files', require('./api/file'));
-  console.log('after index');
   app.use('/api/opportunities', require('./api/opportunity'));
   app.use('/api/users', require('./api/user'));
 

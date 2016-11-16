@@ -18,7 +18,6 @@ export default function (sequelize, DataTypes) {
       // underscored: true,
       classMethods: {
         associate: function (models) {
-          console.log('Opportunity models');
           Opportunity.hasOne(models.File, {
             onDelete: 'cascade'
           });

@@ -39,11 +39,11 @@ export function photoCaptureService() {
       console.log('initPHotoCapture');
       // Not showing vendor prefixes or code that works cross-browser.
       var constraints = {
+        audio: false,
         video: {
-          facingMode: {
-            exact: "environment"
-          },
-          width: 1280, height: 720
+          // facingMode: "environment",
+          width: 1280,
+          height: 720
         },
         "permissions": {
           "video-capture": {
@@ -52,45 +52,52 @@ export function photoCaptureService() {
         }
       };
       navigator.mediaDevices.getUserMedia(constraints)
-        .then(function(stream) {
+        .then(function (stream) {
+          console.log('use the stream');
 
           if (navigator.mediaDevices) {
+            console.log('video.srcObject = stream;');
+            window.stream = stream;
             video.srcObject = stream;
-          } else {
-            video.src =  window.URL.createObjectURL(stream);
-          }
-          video.onloadedmetadata = function(e) {
-            console.log('onloadedmetadata');
             video.play();
+          } else {
+            window.stream = stream;            
+            video.src = window.URL.createObjectURL(stream);
+            console.log('video.src = window.URL.createObjectURL(stream);');
+            video.play();
+          }
+          video.onloadedmetadata = function (e) {
+            console.log('onloadedmetadata');
+            // video.play();
           };
           localMediaStream = stream;
 
           console.log("video", video);
-            console.log('canplay');
-            if (!streaming) {
-               console.log("video", video);
-                console.log("this", this);
-              height = video.videoHeight / (video.videoWidth/width);
-            
-              // Firefox currently has a bug where the height can't be read from
-              // the video, so we will make assumptions if this happens.
-            
-              if (isNaN(height)) {
-                height = width / (4/3);
-              }
-            
-              video.setAttribute('width', width);
-              video.setAttribute('height', height);
-              canvas.setAttribute('width', width);
-              canvas.setAttribute('height', height);
-              streaming = true;
+          console.log('canplay');
+          if (!streaming) {
+            console.log("video", video);
+            console.log("this", this);
+            height = video.videoHeight / (video.videoWidth / width);
+
+            // Firefox currently has a bug where the height can't be read from
+            // the video, so we will make assumptions if this happens.
+
+            if (isNaN(height)) {
+              height = width / (4 / 3);
             }
+
+            video.setAttribute('width', width);
+            video.setAttribute('height', height);
+            canvas.setAttribute('width', width);
+            canvas.setAttribute('height', height);
+            streaming = true;
+          }
 
           console.log('video.srcObject', video.srcObject);
           console.log('video.src', video.src);
           console.log('localMediaStream', localMediaStream);
         })
-        .catch(function(error) {
+        .catch(function (error) {
           console.log('init PHoto Capture error', error);
         });
 

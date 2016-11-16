@@ -25,7 +25,6 @@ export class OpportunitiesComponent {
   /*@ngInject*/
   constructor(public opportunityService) {
     this.opportunities = this.opportunityService.
-    console.log('this', this)
   }
 }
 
@@ -35,6 +34,5 @@ export default angular.module('saveButtonAppApp.opportunities', [uiRouter, Oppor
     template: require('./opportunities.html'),
     controller: OpportunitiesComponent,
     bindings: { opportunities: '<' }
-    // controllerAs: 'opportunitiesCtrl'
   })
   .name;
